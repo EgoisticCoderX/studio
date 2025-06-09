@@ -10,10 +10,10 @@ export default function AboutSection() {
   ];
 
   return (
-    <section id="about" className="py-16 md:py-24 bg-background">
+    <section id="about" className="py-16 md:py-24 bg-background overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
+          <div className="opacity-0 animate-fadeInUp">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">
               About A.X. Studioz
             </h2>
@@ -26,8 +26,8 @@ export default function AboutSection() {
             <div className="mt-8">
               <h3 className="text-2xl font-semibold font-headline">Our Core Values</h3>
               <ul className="mt-4 space-y-3">
-                {values.map((value) => (
-                  <li key={value.name} className="flex items-start">
+                {values.map((value, index) => (
+                  <li key={value.name} className="flex items-start opacity-0 animate-fadeInUp" style={{ animationDelay: `${index * 100 + 200}ms` }}>
                     <CheckCircle className="h-6 w-6 text-primary mr-3 mt-1 shrink-0" />
                     <div>
                       <span className="font-semibold">{value.name}:</span> {value.description}
@@ -37,7 +37,7 @@ export default function AboutSection() {
               </ul>
             </div>
           </div>
-          <div className="relative aspect-square rounded-lg overflow-hidden shadow-lg group">
+          <div className="relative aspect-square rounded-lg overflow-hidden shadow-lg group opacity-0 animate-fadeIn-400">
             <Image
               src="https://placehold.co/600x600.png"
               alt="A.X. Studioz Team or Abstract AI concept"

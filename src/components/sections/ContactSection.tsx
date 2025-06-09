@@ -21,9 +21,9 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-16 md:py-24 bg-background">
+    <section id="contact" className="py-16 md:py-24 bg-background overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 opacity-0 animate-fadeInUp">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">
             Get In Touch
           </h2>
@@ -33,11 +33,11 @@ export default function ContactSection() {
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-12 items-start">
-          <div className="space-y-6">
+          <div className="space-y-6 opacity-0 animate-fadeInUp-200">
             <h3 className="text-2xl font-semibold font-headline">Contact Information</h3>
             <div className="flex items-center space-x-3">
               <Mail className="h-6 w-6 text-accent" />
-              <a href="mailto:contact@axstudioz.ai" className="hover:text-primary">contact@axstudioz.ai</a>
+              <a href="mailto:contact@axstudioz.ai" className="hover:text-primary transition-colors">contact@axstudioz.ai</a>
             </div>
             <div className="flex items-center space-x-3">
               <Phone className="h-6 w-6 text-accent" />
@@ -52,7 +52,7 @@ export default function ContactSection() {
             </p>
           </div>
           
-          <form onSubmit={handleSubmit} className="space-y-6 p-6 md:p-8 border rounded-lg shadow-lg bg-card">
+          <form onSubmit={handleSubmit} className="space-y-6 p-6 md:p-8 border rounded-lg shadow-lg bg-card opacity-0 animate-fadeInUp-400">
             <div>
               <Label htmlFor="name" className="font-semibold">Full Name</Label>
               <Input type="text" id="name" name="name" required className="mt-1" placeholder="Your Name" />

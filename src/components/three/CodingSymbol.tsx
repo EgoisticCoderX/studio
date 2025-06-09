@@ -10,6 +10,7 @@ const CodingSymbol: React.FC = () => {
     if (!mountRef.current) return;
 
     const currentMount = mountRef.current;
+    let animationFrameId: number;
 
     // Scene
     const scene = new THREE.Scene();
@@ -17,35 +18,44 @@ const CodingSymbol: React.FC = () => {
 
     // Camera
     const camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 0.1, 1000);
-    camera.position.z = 5;
+    camera.position.z = 4; // Adjusted for Icosahedron
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
     currentMount.appendChild(renderer.domElement);
 
-    // Coding Symbol Geometry (simple cube as placeholder)
-    const geometry = new THREE.BoxGeometry(2, 2, 2);
+    // Coding Symbol Geometry (Icosahedron for a more complex/techy look)
+    const geometry = new THREE.IcosahedronGeometry(1.5, 0); // radius, detail
     const material = new THREE.MeshStandardMaterial({ 
-        color: 0x4682B4, // Steel Blue
-        metalness: 0.5,
-        roughness: 0.4,
+        color: 0x4682B4, // Steel Blue (accent color)
+        metalness: 0.6,
+        roughness: 0.3,
+        flatShading: false,
     });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+    const symbol = new THREE.Mesh(geometry, material);
+    scene.add(symbol);
 
     // Lights
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(1, 1, 1).normalize();
+    const pointLight = new THREE.PointLight(0xffffff, 1.0, 100);
+    pointLight.position.set(3, 2, 3);
+    scene.add(pointLight);
+    const directionalLight = new THREE.DirectionalLight(0xccddff, 0.7);
+    directionalLight.position.set(-2, 3, -2);
     scene.add(directionalLight);
     
     // Animation
+    const clock = new THREE.Clock();
     const animate = () => {
-      requestAnimationFrame(animate);
-      cube.rotation.x += 0.005;
-      cube.rotation.y += 0.007;
+      animationFrameId = requestAnimationFrame(animate);
+      const elapsedTime = clock.getElapsedTime();
+
+      symbol.rotation.x = elapsedTime * 0.2;
+      symbol.rotation.y = elapsedTime * 0.35;
+      symbol.rotation.z = elapsedTime * 0.1;
+      
       renderer.render(scene, camera);
     };
     animate();
@@ -62,8 +72,9 @@ const CodingSymbol: React.FC = () => {
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
-      if (currentMount) {
+      if (currentMount && renderer.domElement && currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }
       renderer.dispose();

@@ -27,9 +27,9 @@ const projects = [
 
 export default function ProjectsSection() {
   return (
-    <section id="projects" className="py-16 md:py-24 bg-secondary/20">
+    <section id="projects" className="py-16 md:py-24 bg-secondary/20 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 opacity-0 animate-fadeInUp">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline">
             Our Flagship AI Projects
           </h2>
@@ -38,8 +38,10 @@ export default function ProjectsSection() {
           </p>
         </div>
         <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
-          {projects.map((project) => (
-            <ProjectCard key={project.title} {...project} />
+          {projects.map((project, index) => (
+            <div key={project.title} className="opacity-0 animate-fadeInUp" style={{ animationDelay: `${index * 200 + 200}ms` }}>
+              <ProjectCard {...project} />
+            </div>
           ))}
         </div>
       </div>

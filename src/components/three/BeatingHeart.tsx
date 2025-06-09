@@ -10,6 +10,7 @@ const BeatingHeart: React.FC = () => {
     if (!mountRef.current) return;
 
     const currentMount = mountRef.current;
+    let animationFrameId: number;
 
     // Scene
     const scene = new THREE.Scene();
@@ -17,44 +18,49 @@ const BeatingHeart: React.FC = () => {
 
     // Camera
     const camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 0.1, 1000);
-    camera.position.z = 5;
+    camera.position.z = 3.5; // Adjusted for new geometry size
 
     // Renderer
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); // alpha: true for transparent background
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
     currentMount.appendChild(renderer.domElement);
 
-    // Heart Geometry (simple sphere as placeholder)
-    const geometry = new THREE.SphereGeometry(1.5, 32, 16);
+    // Heart Geometry (TorusKnot as a more abstract "tech" heart)
+    const geometry = new THREE.TorusKnotGeometry(1, 0.3, 100, 16); // radius, tube, tubularSegments, radialSegments
     const material = new THREE.MeshStandardMaterial({ 
-      color: 0xff0000, // Red
-      metalness: 0.3,
-      roughness: 0.6,
+      color: 0x50C878, // Emerald green (primary color)
+      metalness: 0.4,
+      roughness: 0.5,
+      emissive: 0x103010, // Slight green glow
     });
     const heart = new THREE.Mesh(geometry, material);
     scene.add(heart);
 
     // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambientLight);
-    const pointLight = new THREE.PointLight(0xffffff, 1);
-    pointLight.position.set(5, 5, 5);
+    const pointLight = new THREE.PointLight(0xffffff, 1.2, 100);
+    pointLight.position.set(2, 3, 4);
     scene.add(pointLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(-2, -1, 1);
+    scene.add(directionalLight);
+
 
     // Animation
-    let scaleDirection = 1;
+    const clock = new THREE.Clock();
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
 
-      heart.rotation.y += 0.005;
+      const elapsedTime = clock.getElapsedTime();
+      
+      heart.rotation.y = elapsedTime * 0.3;
+      heart.rotation.x = elapsedTime * 0.15;
 
-      // Simple beating animation
-      let scale = heart.scale.x;
-      scale += 0.005 * scaleDirection;
-      if (scale > 1.1 || scale < 0.9) {
-        scaleDirection *= -1;
-      }
-      heart.scale.set(scale, scale, scale);
+      // Smoother beating animation using sine wave
+      const scaleFactor = 0.1 * Math.sin(elapsedTime * Math.PI * 1.5); // Adjust speed/amplitude of beat
+      const baseScale = 1.0;
+      heart.scale.set(baseScale + scaleFactor, baseScale + scaleFactor, baseScale + scaleFactor);
       
       renderer.render(scene, camera);
     };
@@ -72,8 +78,9 @@ const BeatingHeart: React.FC = () => {
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
-      if (currentMount) {
+      if (currentMount && renderer.domElement && currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }
       renderer.dispose();
