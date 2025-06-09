@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import Link from 'next/link';
@@ -15,9 +14,8 @@ const navLinks = [
   { href: '/#hero', label: 'Home' },
   { href: '/#about', label: 'About' },
   { href: '/#projects', label: 'Projects' },
-  { href: '/#news', label: 'News' }, // Added News link
+  { href: '/#news', label: 'News' },
   { href: '/#contact', label: 'Contact' },
-  { href: '/explain-code', label: 'Explain Code' },
   { href: '/auth', label: 'Login' },
 ];
 
@@ -28,16 +26,14 @@ export default function Header() {
   useEffect(() => {
     const handleScroll = () => {
       let currentSectionId = '';
-      const headerOffset = 80; // Adjusted offset for better accuracy with fixed header
+      const headerOffset = 80; 
 
-      // Iterate from bottom to top to correctly identify the "last" active section
       for (let i = navLinks.length - 1; i >= 0; i--) {
         const link = navLinks[i];
         if (link.href.startsWith('/#')) {
           const sectionId = link.href.substring(2);
           const sectionElement = document.getElementById(sectionId);
           if (sectionElement) {
-            // A section is active if its top is less than or equal to scrollY + headerOffset
             if (sectionElement.offsetTop <= window.scrollY + headerOffset) {
               currentSectionId = sectionId;
               break; 
@@ -46,7 +42,6 @@ export default function Header() {
         }
       }
       
-      // Fallback for when scrolled to the very top or above the first section
       if (!currentSectionId && window.scrollY < 200) {
          currentSectionId = 'hero';
       }
@@ -55,7 +50,7 @@ export default function Header() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Call on mount to set initial active link
+    handleScroll(); 
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -68,7 +63,10 @@ export default function Header() {
         <Logo />
         <nav className="hidden items-center space-x-6 md:flex">
           {navLinks.map((link) => {
-            const isActive = link.href.startsWith('/#') && activeSection === link.href.substring(2);
+            const isActivePage = typeof window !== 'undefined' && window.location.pathname === link.href && !link.href.includes('#');
+            const isActiveSection = link.href.startsWith('/#') && activeSection === link.href.substring(2);
+            const isActive = isActivePage || isActiveSection;
+            
             return (
               <Link
                 key={link.href}
@@ -105,7 +103,9 @@ export default function Header() {
                 </div>
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((link) => {
-                     const isActive = link.href.startsWith('/#') && activeSection === link.href.substring(2);
+                     const isActivePage = typeof window !== 'undefined' && window.location.pathname === link.href && !link.href.includes('#');
+                     const isActiveSection = link.href.startsWith('/#') && activeSection === link.href.substring(2);
+                     const isActive = isActivePage || isActiveSection;
                     return (
                       <SheetClose asChild key={link.href}>
                         <Link

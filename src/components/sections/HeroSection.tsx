@@ -2,13 +2,16 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useRef, useState, useEffect } from 'react';
-import SciFiStarfield from '@/components/three/SciFiStarfield';
+import StarryNightBackground from '@/components/three/StarryNightBackground';
 import Image from 'next/image';
-
+import { useTypewriter } from '@/hooks/useTypewriter';
 
 export default function HeroSection({ className }: { className?: string }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [offsetY, setOffsetY] = useState(0);
+
+  const fullHeadline = "Innovating AI for a Brighter Future";
+  const typedHeadlineContent = useTypewriter(fullHeadline, { typingSpeed: 70, loop: false });
 
   const handleScroll = () => {
     setOffsetY(window.scrollY);
@@ -20,23 +23,50 @@ export default function HeroSection({ className }: { className?: string }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const renderHeadline = () => {
+    const keyword = "Brighter Future";
+    const keywordActual = fullHeadline.includes(keyword) ? keyword : ""; // Ensure keyword exists
+  
+    // Find the part of typedHeadlineContent that corresponds to the keyword
+    let currentlyTypedKeyword = "";
+    if (typedHeadlineContent.length > fullHeadline.indexOf(keywordActual)) {
+      currentlyTypedKeyword = typedHeadlineContent.substring(
+        fullHeadline.indexOf(keywordActual), 
+        Math.min(typedHeadlineContent.length, fullHeadline.indexOf(keywordActual) + keywordActual.length)
+      );
+    }
+  
+    const beforeKeywordText = typedHeadlineContent.substring(0, fullHeadline.indexOf(keywordActual));
+    const afterKeywordText = typedHeadlineContent.substring(fullHeadline.indexOf(keywordActual) + keywordActual.length);
+
+    if (keywordActual && typedHeadlineContent.length >= fullHeadline.indexOf(keywordActual)) {
+      return (
+        <>
+          {beforeKeywordText}
+          <span className="text-primary">{currentlyTypedKeyword}</span>
+          {afterKeywordText}
+        </>
+      );
+    }
+    return <>{typedHeadlineContent}</>;
+  };
+
+
   return (
     <section 
       id="hero" 
       ref={sectionRef} 
       className={`py-20 md:py-32 bg-gradient-to-br from-background to-secondary/30 overflow-hidden relative ${className}`}
     >
-      {/* Parallax background element */}
       <div 
-        className="absolute inset-0 z-0 overflow-hidden opacity-40" // Adjusted opacity for starfield
-        style={{ transform: `translateY(${offsetY * 0.2}px)` }} // Slightly adjusted parallax speed
+        className="absolute inset-0 z-0 overflow-hidden opacity-60"
+        style={{ transform: `translateY(${offsetY * 0.2}px)` }}
       >
-        <SciFiStarfield />
+        <StarryNightBackground />
       </div>
       <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline opacity-0 animate-fadeInUp">
-          Innovating AI for a{' '}
-          <span className="text-primary">Brighter Future</span>
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline opacity-100 min-h-[100px] md:min-h-[160px]">
+          {renderHeadline()}<span className="inline-block animate-pulse">|</span>
         </h1>
         <p className="mt-6 max-w-3xl mx-auto text-lg text-foreground/80 md:text-xl opacity-0 animate-fadeInUp-200">
           A.X. Studioz is at the forefront of developing intelligent solutions

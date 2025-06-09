@@ -1,9 +1,4 @@
-import CodeExplainer from '@/components/explain/CodeExplainer';
+import { config } from 'dotenv';
+config();
 
-export default function ExplainCodePage() {
-  return (
-    <div className="py-8">
-      <CodeExplainer />
-    </div>
-  );
-}
+// Removed import for '@/ai/flows/explain-code.ts';
