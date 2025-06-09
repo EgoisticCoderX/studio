@@ -40,7 +40,7 @@ export default function LoginForm() {
           <Checkbox id="remember-me-login" />
           <Label htmlFor="remember-me-login" className="ml-2 block text-sm">Remember me</Label>
         </div> */}
-        <Link href="#" className="text-sm text-accent hover:text-primary">
+        <Link href="#" className="text-sm text-accent hover:text-primary transition-colors duration-150 ease-in-out">
           Forgot password?
         </Link>
       </div>
