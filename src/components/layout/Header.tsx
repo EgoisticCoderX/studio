@@ -100,7 +100,8 @@ export default function Header() {
         </nav>
         <div className="flex items-center space-x-2">
           <ThemeToggle />
-          <div className="md:hidden">
+          {/* Removed md:hidden to make hamburger menu button visible on all screen sizes */}
+          <div> 
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
