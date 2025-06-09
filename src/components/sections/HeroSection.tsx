@@ -1,44 +1,37 @@
 
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRef, useState, useEffect } from 'react';
+import SciFiStarfield from '@/components/three/SciFiStarfield';
+import Image from 'next/image';
+
 
 export default function HeroSection({ className }: { className?: string }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [offsetY, setOffsetY] = useState(0);
 
   const handleScroll = () => {
-    // Parallax effect is driven by global scroll, no need for sectionRef here for offsetY
     setOffsetY(window.scrollY);
   };
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial call
+    handleScroll(); 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <section 
-      id="hero" // Added ID for scroll spy
+      id="hero" 
       ref={sectionRef} 
       className={`py-20 md:py-32 bg-gradient-to-br from-background to-secondary/30 overflow-hidden relative ${className}`}
     >
       {/* Parallax background element */}
       <div 
-        className="absolute inset-0 z-0 overflow-hidden" 
-        style={{ transform: `translateY(${offsetY * 0.3}px)` }} // Adjusted parallax speed slightly
+        className="absolute inset-0 z-0 overflow-hidden opacity-40" // Adjusted opacity for starfield
+        style={{ transform: `translateY(${offsetY * 0.2}px)` }} // Slightly adjusted parallax speed
       >
-        <Image
-          src="https://placehold.co/1920x1080.png" // Using a common large placeholder size
-          alt="Abstract futuristic background"
-          layout="fill"
-          objectFit="cover"
-          className="opacity-10" // Reduced opacity for subtlety
-          data-ai-hint="abstract technology"
-          priority
-        />
+        <SciFiStarfield />
       </div>
       <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline opacity-0 animate-fadeInUp">
