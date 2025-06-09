@@ -20,6 +20,24 @@ export default function ContactSection() {
     (event.target as HTMLFormElement).reset();
   };
 
+  const contactItems = [
+    {
+      icon: <Mail className="h-6 w-6 text-accent" />,
+      text: <a href="mailto:contact@axstudioz.ai" className="hover:text-primary transition-colors">contact@axstudioz.ai</a>,
+      key: "email"
+    },
+    {
+      icon: <Phone className="h-6 w-6 text-accent" />,
+      text: <span>+1 (555) 123-4567</span>,
+      key: "phone"
+    },
+    {
+      icon: <MapPin className="h-6 w-6 text-accent" />,
+      text: <span>123 AI Lane, Innovation City, Techtopia 12345</span>,
+      key: "address"
+    }
+  ];
+
   return (
     <section id="contact" className="py-16 md:py-24 bg-background overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
@@ -33,26 +51,24 @@ export default function ContactSection() {
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-12 items-start">
-          <div className="space-y-6 opacity-0 animate-fadeInUp-200">
+          <div className="space-y-6 opacity-0 animate-fadeInUp" style={{ animationDelay: '200ms' }}>
             <h3 className="text-2xl font-semibold font-headline">Contact Information</h3>
-            <div className="flex items-center space-x-3">
-              <Mail className="h-6 w-6 text-accent" />
-              <a href="mailto:contact@axstudioz.ai" className="hover:text-primary transition-colors">contact@axstudioz.ai</a>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Phone className="h-6 w-6 text-accent" />
-              <span>+1 (555) 123-4567</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <MapPin className="h-6 w-6 text-accent" />
-              <span>123 AI Lane, Innovation City, Techtopia 12345</span>
-            </div>
-            <p className="text-foreground/70 pt-4">
+            {contactItems.map((item, index) => (
+              <div 
+                key={item.key} 
+                className="flex items-center space-x-3 opacity-0 animate-fadeInUp" 
+                style={{ animationDelay: `${index * 150 + 300}ms` }}
+              >
+                {item.icon}
+                {item.text}
+              </div>
+            ))}
+            <p className="text-foreground/70 pt-4 opacity-0 animate-fadeInUp" style={{ animationDelay: `${contactItems.length * 150 + 300}ms` }}>
               Connect with us to explore how A.X. Studioz can help drive innovation and create impactful AI solutions for your needs.
             </p>
           </div>
           
-          <form onSubmit={handleSubmit} className="space-y-6 p-6 md:p-8 border rounded-lg shadow-lg bg-card opacity-0 animate-fadeInUp-400">
+          <form onSubmit={handleSubmit} className="space-y-6 p-6 md:p-8 border rounded-lg shadow-lg bg-card opacity-0 animate-fadeInUp" style={{ animationDelay: '400ms' }}>
             <div>
               <Label htmlFor="name" className="font-semibold">Full Name</Label>
               <Input type="text" id="name" name="name" required className="mt-1" placeholder="Your Name" />

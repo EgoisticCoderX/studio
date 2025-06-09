@@ -14,7 +14,7 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ title, description, icon, versions, learnMoreLink = "#" }: ProjectCardProps) {
   return (
-    <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 h-full">
+    <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full hover:scale-105 transform group">
       <CardHeader className="items-center text-center p-6 bg-secondary/30">
         <div className="mb-4 h-32 w-32 flex items-center justify-center">{icon}</div>
         <CardTitle className="text-2xl font-headline">{title}</CardTitle>
