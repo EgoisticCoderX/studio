@@ -7,7 +7,13 @@ import { useState, useEffect } from 'react';
 import Logo from '@/components/Logo';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+  SheetTitle // Imported SheetTitle
+} from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
@@ -100,7 +106,6 @@ export default function Header() {
         </nav>
         <div className="flex items-center space-x-2">
           <ThemeToggle />
-          {/* Removed md:hidden to make hamburger menu button visible on all screen sizes */}
           <div> 
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -110,6 +115,7 @@ export default function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-full max-w-xs bg-background p-6">
+                <SheetTitle className="sr-only">Main Navigation Menu</SheetTitle> 
                 <div className="mb-6 flex items-center justify-between">
                   <Logo />
                   <SheetClose asChild>
