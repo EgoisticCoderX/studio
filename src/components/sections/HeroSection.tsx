@@ -1,4 +1,6 @@
 
+'use client';
+
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useRef, useState, useEffect } from 'react';
@@ -11,7 +13,8 @@ export default function HeroSection({ className }: { className?: string }) {
   const [offsetY, setOffsetY] = useState(0);
 
   const fullHeadline = "Innovating AI for a Brighter Future";
-  const typedHeadlineContent = useTypewriter(fullHeadline, { typingSpeed: 70, loop: true, delayAfterTyping: 2500 });
+  const typewriterIsLooping = true; // Define the loop status here
+  const typedHeadlineContent = useTypewriter(fullHeadline, { typingSpeed: 70, loop: typewriterIsLooping, delayAfterTyping: 2500 });
 
   const handleScroll = () => {
     if (typeof window !== 'undefined') {
@@ -43,7 +46,7 @@ export default function HeroSection({ className }: { className?: string }) {
     const afterKeywordText = typedHeadlineContent.substring(fullHeadline.indexOf(keywordActual) + keywordActual.length);
 
     // Only add cursor if typing is not complete OR if it's looping and current text is shorter than full
-    const showCursor = typedHeadlineContent.length < fullHeadline.length || (typedHeadlineContent.length > 0 && loop);
+    const showCursor = typedHeadlineContent.length < fullHeadline.length || (typedHeadlineContent.length > 0 && typewriterIsLooping);
 
 
     if (keywordActual && typedHeadlineContent.length >= fullHeadline.indexOf(keywordActual)) {
@@ -67,7 +70,7 @@ export default function HeroSection({ className }: { className?: string }) {
       className={`py-20 md:py-32 bg-gradient-to-br from-background to-secondary/30 overflow-hidden relative ${className}`}
     >
       <div 
-        className="absolute inset-0 z-0 overflow-hidden opacity-70" // Increased opacity
+        className="absolute inset-0 z-0 overflow-hidden opacity-70"
         style={{ transform: `translateY(${offsetY * 0.2}px)` }}
       >
         <StarryNightBackground />
