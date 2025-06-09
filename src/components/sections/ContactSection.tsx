@@ -6,12 +6,42 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react"; 
+import { useEffect, useRef, useState } from 'react';
 
 export default function ContactSection({ className }: { className?: string }) {
   const { toast } = useToast();
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 } // Adjust threshold as needed
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      if (sectionRef.current) observer.unobserve(sectionRef.current);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => { 
     event.preventDefault();
     toast({
       title: "Message Sent!",
@@ -39,13 +69,18 @@ export default function ContactSection({ className }: { className?: string }) {
   ];
 
   return (
-    <section id="contact" className={`py-16 md:py-24 bg-background overflow-hidden parallax-section ${className}`}>
+    <section
+      ref={sectionRef}
+      id="contact"
+      className={`py-16 md:py-24 bg-background overflow-hidden parallax-section ${className}`}
+      style={{ backgroundPositionY: `${scrollY * 0.3}px` }} // Enhance parallax effect
+    >
       <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-12 opacity-0 animate-fadeInUp">
+        <div className={`text-center mb-12 transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">
             Get In Touch
           </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-foreground/80 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
+          <p className={`mt-4 max-w-2xl mx-auto text-lg text-foreground/80 transition-opacity duration-1000 delay-200 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
             We'd love to hear from you. Whether you have a question about our projects,
             partnerships, or anything else, our team is ready to answer all your inquiries.
           </p>
@@ -57,15 +92,15 @@ export default function ContactSection({ className }: { className?: string }) {
               <div 
                 key={item.key} 
                 className="flex items-center space-x-3 opacity-0 animate-fadeInUp" 
-                style={{ animationDelay: `${index * 150 + 450}ms` }}
+                style={{ transition: 'opacity 0.8s ease-out', transitionDelay: `${index * 0.2 + 0.5}s` }} // Smooth transition with delay
               >
                 {item.icon}
                 {item.text}
               </div>
             ))}
-            <p className="text-foreground/70 pt-4 opacity-0 animate-fadeInUp" style={{ animationDelay: `${contactItems.length * 150 + 450}ms` }}>
+            <p className={`text-foreground/70 pt-4 transition-opacity duration-1000 delay-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
               Connect with us to explore how A.X. Studioz can help drive innovation and create impactful AI solutions for your needs.
-            </p>
+            </p> 
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-6 p-6 md:p-8 border rounded-lg shadow-lg bg-card opacity-0 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>

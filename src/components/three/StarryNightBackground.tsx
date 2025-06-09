@@ -21,15 +21,45 @@ const StarryNightBackground: React.FC = () => {
 
     // Camera
     const camera = new THREE.PerspectiveCamera(60, currentMount.clientWidth / currentMount.clientHeight, 0.1, 1000);
-    camera.position.z = 1;
+    camera.position.z = 5; // Start camera a bit further back
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
     currentMount.appendChild(renderer.domElement);
 
+    // Mountains
+    const mountainGroup = new THREE.Group();
+    scene.add(mountainGroup);
+
+    const mountainColors = [0xff00ff, 0x00ffff, 0xffff00, 0xffa500, 0x90ee90]; // Funky colors
+
+    const createMountain = (x: number, z: number) => {
+        const height = Math.random() * 200 + 50; // Random height
+        const width = Math.random() * 150 + 50; // Random width
+        const depth = Math.random() * 150 + 50; // Random depth
+
+        // Create a cone-like shape for simplicity
+        const mountainGeometry = new THREE.ConeGeometry(width, height, 4); // Low-poly cone
+        const mountainMaterial = new THREE.MeshBasicMaterial({ color: mountainColors[Math.floor(Math.random() * mountainColors.length)] }); // Random funky color
+
+        const mountain = new THREE.Mesh(mountainGeometry, mountainMaterial);
+        mountain.position.set(x, -currentMount.clientHeight / 2 + height / 4, z); // Position at the bottom
+        mountain.rotation.y = Math.random() * Math.PI * 2; // Random rotation
+        mountainGroup.add(mountain);
+    };
+
+    // Create several mountains
+    const numMountains = 15;
+    for (let i = 0; i < numMountains; i++) {
+        const x = THREE.MathUtils.randFloatSpread(800); // Spread mountains horizontally
+        const z = THREE.MathUtils.randFloatSpread(800) - 500; // Position mountains in the distance
+        createMountain(x, z);
+    }
+
+
     // Starfield
-    const starVertices: number[] = [];
+    const starVertices: number[] = []; 
     const numStars = 15000;
     starMaterialsRef.current = [];
 
@@ -54,9 +84,9 @@ const StarryNightBackground: React.FC = () => {
     // For simplicity with twinkling on main material:
     const mainStarMaterial = new THREE.PointsMaterial({
       color: 0xffffff,
-      size: 0.007,
+      size: 0.15, // Increased star size
       sizeAttenuation: true,
-      transparent: true,
+      transparent: true, 
       opacity: 0.85,
     });
     starMaterialsRef.current.push(mainStarMaterial);
@@ -75,7 +105,7 @@ const StarryNightBackground: React.FC = () => {
       // Subtle twinkling effect by oscillating opacity
       if (starsRef.current) {
         const mainMat = starsRef.current.material as THREE.PointsMaterial;
-        mainMat.opacity = 0.75 + Math.sin(elapsedTime * 1.5) * 0.2; // Oscillate between 0.55 and 0.95
+        mainMat.opacity = 0.9 + Math.sin(elapsedTime * 2) * 0.1; // Increased base opacity and faster twinkling
       }
 
       // Rotate the starfield
@@ -85,8 +115,8 @@ const StarryNightBackground: React.FC = () => {
       }
 
       // Move camera forward slightly for 'flying' effect
-      camera.position.z -= 0.01; // Adjust speed as needed
-      if (camera.position.z < -500) camera.position.z = 500; // Loop the camera position
+      camera.position.z -= 0.05; // Increased movement speed
+      if (camera.position.z < -800) camera.position.z = 800; // Adjusted loop point
       
       renderer.render(scene, camera);
     };
