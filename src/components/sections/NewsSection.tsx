@@ -36,7 +36,7 @@ const newsItems = [
 
 export default function NewsSection({ className }: { className?: string }) {
   return (
-    <section id="news" className={`py-16 md:py-24 bg-background overflow-hidden ${className}`}>
+    <section id="news" className={`py-16 md:py-24 bg-background overflow-hidden parallax-section ${className}`}>
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-12 opacity-0 animate-fadeInUp">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">

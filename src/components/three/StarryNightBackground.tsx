@@ -47,7 +47,7 @@ const StarryNightBackground: React.FC = () => {
     const materialConfigs = [
         { size: 0.008, color: 0xffffff, opacity: 1.0 },
         { size: 0.01, color: 0xeeeeff, opacity: 0.8 },
-        { size: 0.006, color: 0xffdddd, opacity: 0.9 },
+        { size: 0.006, color: 0xffdddd, opacity: 0.9 }, // Subtle reddish tint for some stars
     ];
     
     // Assign materials somewhat randomly to groups of stars if needed, or use one main material
@@ -57,7 +57,7 @@ const StarryNightBackground: React.FC = () => {
       size: 0.007,
       sizeAttenuation: true,
       transparent: true,
-      opacity: 0.85 
+      opacity: 0.85,
     });
     starMaterialsRef.current.push(mainStarMaterial);
 
@@ -72,14 +72,21 @@ const StarryNightBackground: React.FC = () => {
       animationFrameId.current = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
+      // Subtle twinkling effect by oscillating opacity
+      if (starsRef.current) {
+        const mainMat = starsRef.current.material as THREE.PointsMaterial;
+        mainMat.opacity = 0.75 + Math.sin(elapsedTime * 1.5) * 0.2; // Oscillate between 0.55 and 0.95
+      }
+
+      // Rotate the starfield
       if (starsRef.current) {
         starsRef.current.rotation.x = elapsedTime * 0.005;
         starsRef.current.rotation.y = elapsedTime * 0.008;
-
-        // Subtle twinkling effect by oscillating opacity
-        const mainMat = starsRef.current.material as THREE.PointsMaterial;
-        mainMat.opacity = 0.75 + Math.sin(elapsedTime * 1.5) * 0.25; // Oscillate between 0.5 and 1.0
       }
+
+      // Move camera forward slightly for 'flying' effect
+      camera.position.z -= 0.01; // Adjust speed as needed
+      if (camera.position.z < -500) camera.position.z = 500; // Loop the camera position
       
       renderer.render(scene, camera);
     };

@@ -5,7 +5,7 @@ import { Quote } from 'lucide-react';
 
 export default function FoundersWordsSection({ className }: { className?: string }) {
   return (
-    <section id="founders-words" className={`py-16 md:py-24 bg-gradient-animated-secondary overflow-hidden ${className}`}>
+    <section id="founders-words" className={`py-16 md:py-24 bg-gradient-animated-secondary overflow-hidden parallax-section ${className}`}>
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-12 opacity-0 animate-fadeInUp">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">

@@ -3,31 +3,27 @@
 
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useRef, useState, useEffect } from 'react';
-import StarryNightBackground from '@/components/three/StarryNightBackground';
+import { useRef, useState, useEffect } from 'react'; // Added useState, useEffect
 import Image from 'next/image';
 import { useTypewriter } from '@/hooks/useTypewriter';
+import StarryNightBackground from '@/components/three/StarryNightBackground';
 
 export default function HeroSection({ className }: { className?: string }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const [offsetY, setOffsetY] = useState(0);
-
   const fullHeadline = "Innovating AI for a Brighter Future";
-  const typewriterIsLooping = true; // Define the loop status here
+  const typewriterIsLooping = true; 
   const typedHeadlineContent = useTypewriter(fullHeadline, { typingSpeed: 70, loop: typewriterIsLooping, delayAfterTyping: 2500 });
+  
+  const [offsetY, setOffsetY] = useState(0); // Added offsetY state
 
-  const handleScroll = () => {
-    if (typeof window !== 'undefined') {
+  useEffect(() => { // Added effect to update offsetY on scroll
+    const handleScroll = () => {
       setOffsetY(window.scrollY);
-    }
-  };
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      handleScroll(); 
-      return () => window.removeEventListener('scroll', handleScroll);
-    }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const renderHeadline = () => {
@@ -45,7 +41,6 @@ export default function HeroSection({ className }: { className?: string }) {
     const beforeKeywordText = typedHeadlineContent.substring(0, fullHeadline.indexOf(keywordActual));
     const afterKeywordText = typedHeadlineContent.substring(fullHeadline.indexOf(keywordActual) + keywordActual.length);
 
-    // Only add cursor if typing is not complete OR if it's looping and current text is shorter than full
     const showCursor = typedHeadlineContent.length < fullHeadline.length || (typedHeadlineContent.length > 0 && typewriterIsLooping);
 
 
@@ -66,16 +61,17 @@ export default function HeroSection({ className }: { className?: string }) {
   return (
     <section 
       id="hero" 
-      ref={sectionRef} 
-      className={`py-20 md:py-32 bg-gradient-to-br from-background to-secondary/30 overflow-hidden relative ${className}`}
-    >
-      <div 
-        className="absolute inset-0 z-0 overflow-hidden opacity-70"
-        style={{ transform: `translateY(${offsetY * 0.2}px)` }}
+      ref={sectionRef}
+      className={`py-20 md:py-32 relative z-10 parallax-section overflow-hidden ${className || ''}`} 
+>
+      {/* Background Element for Parallax */}
+      <div
+        className="absolute inset-0 z-0 overflow-hidden opacity-70" // Increased opacity from 40 to 70
+        style={{ transform: `translateY(${offsetY * 0.2}px)` }} 
       >
         <StarryNightBackground />
       </div>
-      <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
+      <div className="container mx-auto px-4 md:px-6 text-center relative z-10"> {/* Ensure content is above background */}
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline opacity-100 min-h-[100px] md:min-h-[160px]">
           {renderHeadline()}
         </h1>
