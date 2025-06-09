@@ -118,3 +118,11 @@
   width: 100%;
   height: 100%;
 }
+
+.active-nav-link {
+  @apply text-primary font-semibold;
+}
+
+.active-nav-link::after {
+  @apply w-full; /* Ensure the underline is full width */
+}

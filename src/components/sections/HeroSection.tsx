@@ -9,38 +9,34 @@ export default function HeroSection({ className }: { className?: string }) {
   const [offsetY, setOffsetY] = useState(0);
 
   const handleScroll = () => {
-    if (sectionRef.current) {
-      // Calculate offset relative to the section's top
-      // This is a simple version; more robust solutions might use IntersectionObserver
-      // For now, window.scrollY provides a global parallax effect
-      setOffsetY(window.scrollY);
-    }
+    // Parallax effect is driven by global scroll, no need for sectionRef here for offsetY
+    setOffsetY(window.scrollY);
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    // Initial call to set position if already scrolled
-    handleScroll(); 
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial call
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <section 
+      id="hero" // Added ID for scroll spy
       ref={sectionRef} 
       className={`py-20 md:py-32 bg-gradient-to-br from-background to-secondary/30 overflow-hidden relative ${className}`}
     >
       {/* Parallax background element */}
       <div 
         className="absolute inset-0 z-0 overflow-hidden" 
-        style={{ transform: `translateY(${offsetY * 0.4}px)` }}
+        style={{ transform: `translateY(${offsetY * 0.3}px)` }} // Adjusted parallax speed slightly
       >
         <Image
-          src="https://placehold.co/1920x1200.png"
-          alt="Parallax background"
+          src="https://placehold.co/1920x1080.png" // Using a common large placeholder size
+          alt="Abstract futuristic background"
           layout="fill"
           objectFit="cover"
-          className="opacity-20" 
-          data-ai-hint="abstract texture"
+          className="opacity-10" // Reduced opacity for subtlety
+          data-ai-hint="abstract technology"
           priority
         />
       </div>
@@ -68,7 +64,7 @@ export default function HeroSection({ className }: { className?: string }) {
               layout="fill"
               objectFit="cover"
               priority
-              data-ai-hint="abstract technology"
+              data-ai-hint="futuristic interface"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
             <div className="absolute bottom-8 left-8 text-left">
