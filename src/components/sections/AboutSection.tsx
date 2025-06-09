@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { CheckCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-export default function AboutSection({ className }: { className?: string }) {
+export default function AboutSection({ className: incomingClassName }: { className?: string }) {
   const values = [
     { name: 'Innovation', description: 'Continuously pushing the boundaries of AI technology.' },
     { name: 'Ethical AI', description: 'Committing to responsible and fair AI development.' },
@@ -29,20 +29,24 @@ export default function AboutSection({ className }: { className?: string }) {
       }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    let currentSectionRef = sectionRef.current;
+    if (currentSectionRef) {
+      observer.observe(currentSectionRef);
     }
 
     // Cleanup observer on component unmount
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentSectionRef) {
+        observer.unobserve(currentSectionRef);
       }
     };
   }, []);
 
+  // Construct the final className string, handling the optional incomingClassName
+  const sectionClasses = `py-16 md:py-24 bg-gradient-animated overflow-hidden relative ${incomingClassName || ''}`.trim();
+
   return (
-    <section id="about" ref={sectionRef} className={`py-16 md:py-24 bg-gradient-animated overflow-hidden relative ${className}`}>
+    <section id="about" ref={sectionRef} className={sectionClasses}>
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="opacity-0 animate-fadeInUp">
