@@ -63,10 +63,10 @@ export default function PlansSection({ className }: { className?: string }) {
           {plans.map((plan, index) => (
             <div 
               key={plan.title} 
-              className="opacity-0 animate-fadeInUp" 
+              className="opacity-0 animate-fadeInUp h-full" 
               style={{ animationDelay: `${index * 150 + 400}ms` }}
             >
-              <PlanCard {...plan} />
+              <PlanCard {...plan} className="h-full" />
             </div>
           ))}
         </div>

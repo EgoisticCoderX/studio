@@ -40,7 +40,7 @@ export default function ProjectsSection({ className }: { className?: string }) {
         </div>
         <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
-            <div key={project.title} className="opacity-0 animate-fadeInUp" style={{ animationDelay: `${index * 200 + 400}ms` }}>
+            <div key={project.title} className="opacity-0 animate-fadeInUp" style={{ animationDelay: `${index * 150 + 400}ms` }}>
               <ProjectCard {...project} />
             </div>
           ))}

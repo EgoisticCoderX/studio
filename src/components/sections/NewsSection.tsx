@@ -48,7 +48,7 @@ export default function NewsSection({ className }: { className?: string }) {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {newsItems.map((item, index) => (
-            <div key={item.title} className="opacity-0 animate-fadeInUp" style={{ animationDelay: `${index * 150 + 400}ms` }}>
+            <div key={item.title} className="opacity-0 animate-fadeInUp h-full" style={{ animationDelay: `${index * 150 + 400}ms` }}>
               <NewsCard {...item} />
             </div>
           ))}

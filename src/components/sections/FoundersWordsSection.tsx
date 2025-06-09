@@ -11,14 +11,14 @@ export default function FoundersWordsSection({ className }: { className?: string
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">
             A Message From Our Founder
           </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-foreground/80">
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-foreground/80 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
             Insights and vision from the heart of A.X. Studioz.
           </p>
         </div>
 
-        <Card className="max-w-4xl mx-auto shadow-xl overflow-hidden bg-card/80 backdrop-blur-sm opacity-0 animate-fadeInUp" style={{animationDelay: '0.2s'}}>
+        <Card className="max-w-4xl mx-auto shadow-xl overflow-hidden bg-card/80 backdrop-blur-sm opacity-0 animate-fadeInUp" style={{animationDelay: '0.3s'}}>
           <div className="md:flex">
-            <div className="md:w-1/3 p-6 flex items-center justify-center opacity-0 animate-fadeInUp" style={{animationDelay: '0.4s'}}>
+            <div className="md:w-1/3 p-6 flex items-center justify-center opacity-0 animate-fadeInUp" style={{animationDelay: '0.5s'}}>
               <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden shadow-lg border-4 border-primary/50">
                 <Image
                   src="https://placehold.co/300x300.png"
@@ -29,7 +29,7 @@ export default function FoundersWordsSection({ className }: { className?: string
                 />
               </div>
             </div>
-            <CardContent className="md:w-2/3 p-6 md:p-8 opacity-0 animate-fadeInUp" style={{animationDelay: '0.6s'}}>
+            <CardContent className="md:w-2/3 p-6 md:p-8 opacity-0 animate-fadeInUp" style={{animationDelay: '0.7s'}}>
               <Quote className="w-10 h-10 text-primary mb-4" />
               <p className="text-lg md:text-xl italic text-foreground/90 leading-relaxed mb-6">
                 "At A.X. Studioz, we believe that artificial intelligence holds the key to unlocking solutions
@@ -52,3 +52,4 @@ export default function FoundersWordsSection({ className }: { className?: string
     </section>
   );
 }
+
