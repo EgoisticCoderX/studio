@@ -1,3 +1,4 @@
+
 import ProjectCard from "@/components/ProjectCard";
 import BeatingHeart from "@/components/three/BeatingHeart";
 import CodingSymbol from "@/components/three/CodingSymbol";
@@ -37,7 +38,7 @@ export default function ProjectsSection({ className }: { className?: string }) {
             Discover the innovative AI solutions we're building to shape a better tomorrow.
           </p>
         </div>
-        <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
             <div key={project.title} className="opacity-0 animate-fadeInUp" style={{ animationDelay: `${index * 200 + 200}ms` }}>
               <ProjectCard {...project} />
