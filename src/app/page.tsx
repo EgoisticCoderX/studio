@@ -1,9 +1,11 @@
+
 'use client';
 
 import HeroSection from '@/components/sections/HeroSection';
 import AboutSection from '@/components/sections/AboutSection';
 import ProjectsSection from '@/components/sections/ProjectsSection';
 import ContactSection from '@/components/sections/ContactSection';
+import NewsSection from '@/components/sections/NewsSection'; // Import NewsSection
 import { useEffect } from 'react';
 
 export default function Home() {
@@ -26,6 +28,7 @@ export default function Home() {
     <HeroSection className="animated-section" />
     <AboutSection className="animated-section" />
     <ProjectsSection className="animated-section" />
+    <NewsSection className="animated-section" /> 
     <ContactSection className="animated-section" />
   </>
 
