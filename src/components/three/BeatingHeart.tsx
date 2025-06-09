@@ -12,6 +12,8 @@ const BeatingHeart: React.FC = () => {
     const currentMount = mountRef.current;
     let animationFrameId: number;
 
+    const mouse = new THREE.Vector2();
+
     // Scene
     const scene = new THREE.Scene();
     scene.background = null; // Transparent background
@@ -51,11 +53,15 @@ const BeatingHeart: React.FC = () => {
     const clock = new THREE.Clock();
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-
       const elapsedTime = clock.getElapsedTime();
       
-      heart.rotation.y = elapsedTime * 0.3;
-      heart.rotation.x = elapsedTime * 0.15;
+      // Existing rotation
+      // heart.rotation.y = elapsedTime * 0.3;
+      // heart.rotation.x = elapsedTime * 0.15;
+
+      // Rotate heart based on mouse position (subtle effect)
+      heart.rotation.y = mouse.x * 0.5; // Adjust multiplier for sensitivity
+      heart.rotation.x = mouse.y * 0.5; // Adjust multiplier for sensitivity
 
       // Smoother beating animation using sine wave
       const scaleFactor = 0.1 * Math.sin(elapsedTime * Math.PI * 1.5); // Adjust speed/amplitude of beat
@@ -75,11 +81,22 @@ const BeatingHeart: React.FC = () => {
       }
     };
     window.addEventListener('resize', handleResize);
+    
+    // Handle mouse movement
+    const handleMouseMove = (event: MouseEvent) => {
+        if(currentMount) {
+            // Normalize mouse coordinates (-1 to +1)
+            mouse.x = (event.clientX / currentMount.clientWidth) * 2 - 1;
+            mouse.y = -(event.clientY / currentMount.clientHeight) * 2 + 1;
+        }
+    };
+    currentMount.addEventListener('mousemove', handleMouseMove);
 
     // Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
+      currentMount.removeEventListener('mousemove', handleMouseMove);
       if (currentMount && renderer.domElement && currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }

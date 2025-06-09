@@ -1,10 +1,25 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRef, useState, useEffect } from 'react';
 
-export default function HeroSection() {
+export default function HeroSection({ className }: { className?: string }) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [offsetY, setOffsetY] = useState(0);
+
+  const handleScroll = () => setOffsetY(window.scrollY);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section className="py-20 md:py-32 bg-gradient-to-br from-background to-secondary/30 overflow-hidden">
+    <section ref={sectionRef} className={`py-20 md:py-32 bg-gradient-to-br from-background to-secondary/30 overflow-hidden relative ${className}`}>
+      {/* Parallax background element */}
+      <div className="absolute inset-0" style={{ transform: `translateY(${offsetY * 0.3}px)` }}>
+        {/* You can place an image or another background element here */}
+      </div>
       <div className="container mx-auto px-4 md:px-6 text-center">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline opacity-0 animate-fadeInUp">
           Innovating AI for a{' '}

@@ -11,6 +11,8 @@ const CodingSymbol: React.FC = () => {
 
     const currentMount = mountRef.current;
     let animationFrameId: number;
+    let mouseX = 0;
+    let mouseY = 0;
 
     // Scene
     const scene = new THREE.Scene();
@@ -50,11 +52,18 @@ const CodingSymbol: React.FC = () => {
     const clock = new THREE.Clock();
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-      const elapsedTime = clock.getElapsedTime();
+      // const elapsedTime = clock.getElapsedTime(); // Keep for original animation if desired
 
-      symbol.rotation.x = elapsedTime * 0.2;
-      symbol.rotation.y = elapsedTime * 0.35;
-      symbol.rotation.z = elapsedTime * 0.1;
+      // Apply subtle rotation based on mouse position
+      // Map mouse coordinates (-1 to 1) to a small rotation range (-0.2 to 0.2 radians)
+      const targetRotationX = mouseY * 0.2;
+      const targetRotationY = mouseX * 0.2;
+
+      // Smoothly interpolate towards the target rotation
+      symbol.rotation.x += (targetRotationX - symbol.rotation.x) * 0.05;
+      symbol.rotation.y += (targetRotationY - symbol.rotation.y) * 0.05;
+
+      // You can combine with original animation if you like, e.g., symbol.rotation.z = elapsedTime * 0.1;
       
       renderer.render(scene, camera);
     };
@@ -68,12 +77,24 @@ const CodingSymbol: React.FC = () => {
             renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
         }
     };
+
+    // Handle mouse movement
+    const handleMouseMove = (event: MouseEvent) => {
+      if(currentMount){
+        // Normalize mouse coordinates to a range of -1 to 1
+        mouseX = (event.clientX / currentMount.clientWidth) * 2 - 1;
+        mouseY = - (event.clientY / currentMount.clientHeight) * 2 + 1;
+      }
+    };
+
     window.addEventListener('resize', handleResize);
+    currentMount.addEventListener('mousemove', handleMouseMove);
 
     // Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
+      currentMount.removeEventListener('mousemove', handleMouseMove);
       if (currentMount && renderer.domElement && currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }

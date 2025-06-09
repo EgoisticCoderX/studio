@@ -6,6 +6,7 @@ import * as THREE from 'three';
 const SolarSystem: React.FC<{ isAnimating?: boolean }> = ({ isAnimating = true }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const animationFrameId = useRef<number | null>(null);
+  const mousePosition = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     if (!mountRef.current || !isAnimating) return;
@@ -57,6 +58,17 @@ const SolarSystem: React.FC<{ isAnimating?: boolean }> = ({ isAnimating = true }
     const pointLight = new THREE.PointLight(0xffffff, 1.5, 300);
     sun.add(pointLight); // Light emanates from the sun
 
+    // Mouse move handler
+    const handleMouseMove = (event: MouseEvent) => {
+      if (currentMount) {
+        // Normalize mouse coordinates to -1 to +1 range
+        mousePosition.current.x = (event.clientX / currentMount.clientWidth) * 2 - 1;
+        mousePosition.current.y = -(event.clientY / currentMount.clientHeight) * 2 + 1;
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
     // Animation
     const animate = () => {
       animationFrameId.current = requestAnimationFrame(animate);
@@ -68,6 +80,11 @@ const SolarSystem: React.FC<{ isAnimating?: boolean }> = ({ isAnimating = true }
         planet.position.z = (planet.userData as any).distance * Math.sin((planet.userData as any).angle);
         planet.rotation.y += 0.01;
       });
+
+      // Subtle camera or sun movement based on mouse position
+      // Moving the camera slightly creates a nice parallax effect
+      camera.position.x += (mousePosition.current.x * 0.5 - camera.position.x) * 0.02;
+      camera.position.y += (mousePosition.current.y * 0.5 - camera.position.y) * 0.02;
       
       renderer.render(scene, camera);
     };
@@ -88,6 +105,7 @@ const SolarSystem: React.FC<{ isAnimating?: boolean }> = ({ isAnimating = true }
     // Cleanup
     return () => {
       if (animationFrameId.current) {
+        window.removeEventListener('mousemove', handleMouseMove);
         cancelAnimationFrame(animationFrameId.current);
       }
       window.removeEventListener('resize', handleResize);

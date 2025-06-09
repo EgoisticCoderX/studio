@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Phone, MapPin } from "lucide-react";
 
-export default function ContactSection() {
+export default function ContactSection({ className }: { className?: string }) {
   const { toast } = useToast();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -39,7 +39,7 @@ export default function ContactSection() {
   ];
 
   return (
-    <section id="contact" className="py-16 md:py-24 bg-background overflow-hidden">
+    <section id="contact" className={`py-16 md:py-24 bg-background overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-12 opacity-0 animate-fadeInUp">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">

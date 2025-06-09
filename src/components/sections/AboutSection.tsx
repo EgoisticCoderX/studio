@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { CheckCircle } from 'lucide-react';
 
-export default function AboutSection() {
+export default function AboutSection({ className }: { className?: string }) {
   const values = [
     { name: 'Innovation', description: 'Continuously pushing the boundaries of AI technology.' },
     { name: 'Ethical AI', description: 'Committing to responsible and fair AI development.' },
@@ -10,7 +10,7 @@ export default function AboutSection() {
   ];
 
   return (
-    <section id="about" className="py-16 md:py-24 bg-background overflow-hidden">
+    <section id="about" className={`py-16 md:py-24 bg-background overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="opacity-0 animate-fadeInUp">
