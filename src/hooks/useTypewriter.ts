@@ -28,41 +28,51 @@ export function useTypewriter(
   } = options || {};
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
+    let unmounted = false;
+
     const handleTyping = () => {
+      if (unmounted) return;
+
       const currentFullText = textsArray[textArrayIndex];
       
       if (isDeleting) {
         setCurrentText(currentFullText.substring(0, currentIndex - 1));
-        setCurrentIndex(currentIndex - 1);
+        setCurrentIndex(prev => prev - 1);
       } else {
         setCurrentText(currentFullText.substring(0, currentIndex + 1));
-        setCurrentIndex(currentIndex + 1);
-      }
-
-      if (!isDeleting && currentIndex === currentFullText.length) {
-        if (textsArray.length > 1 || loop) {
-          timeoutRef.current = setTimeout(() => setIsDeleting(true), delayAfterTyping);
-        }
-      } else if (isDeleting && currentIndex === 0) {
-        setIsDeleting(false);
-        if (textsArray.length > 1) {
-          setTextArrayIndex((prev) => (prev + 1) % textsArray.length);
-        }
-        if (!loop && textArrayIndex === textsArray.length - 1 && textsArray.length > 1) {
-          // Stop if not looping and it's the last text in a multi-text array
-          return; 
-        }
+        setCurrentIndex(prev => prev + 1);
       }
     };
 
-    const speed = isDeleting ? deletingSpeed : typingSpeed;
-    timeoutRef.current = setTimeout(handleTyping, speed);
+    if (isDeleting && currentIndex === 0) {
+      timeoutRef.current = setTimeout(() => {
+        if (unmounted) return;
+        setIsDeleting(false);
+        setTextArrayIndex(prev => (prev + 1) % textsArray.length);
+        setCurrentIndex(0); // Reset index for the new text
+      }, typingSpeed); // Wait a bit before starting next text if looping
+    } else if (!isDeleting && currentIndex === textsArray[textArrayIndex].length) {
+      if (loop || textArrayIndex < textsArray.length - 1) {
+        timeoutRef.current = setTimeout(() => {
+          if (unmounted) return;
+          setIsDeleting(true);
+        }, delayAfterTyping);
+      }
+    } else {
+      const speed = isDeleting ? deletingSpeed : typingSpeed;
+      timeoutRef.current = setTimeout(handleTyping, speed);
+    }
 
     return () => {
+      unmounted = true;
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+      }
+      if(animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
     };
   }, [currentIndex, isDeleting, textsArray, textArrayIndex, loop, typingSpeed, deletingSpeed, delayAfterTyping]);

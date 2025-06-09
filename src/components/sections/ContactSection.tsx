@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,6 @@ export default function ContactSection({ className }: { className?: string }) {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // In a real app, you would handle form submission here (e.g., send data to an API)
     toast({
       title: "Message Sent!",
       description: "Thank you for contacting us. We'll get back to you soon.",
@@ -45,30 +45,30 @@ export default function ContactSection({ className }: { className?: string }) {
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">
             Get In Touch
           </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-foreground/80">
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-foreground/80 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
             We'd love to hear from you. Whether you have a question about our projects,
             partnerships, or anything else, our team is ready to answer all your inquiries.
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-12 items-start">
-          <div className="space-y-6 opacity-0 animate-fadeInUp" style={{ animationDelay: '200ms' }}>
-            <h3 className="text-2xl font-semibold font-headline">Contact Information</h3>
+          <div className="space-y-6">
+            <h3 className="text-2xl font-semibold font-headline opacity-0 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>Contact Information</h3>
             {contactItems.map((item, index) => (
               <div 
                 key={item.key} 
                 className="flex items-center space-x-3 opacity-0 animate-fadeInUp" 
-                style={{ animationDelay: `${index * 150 + 300}ms` }}
+                style={{ animationDelay: `${index * 150 + 450}ms` }}
               >
                 {item.icon}
                 {item.text}
               </div>
             ))}
-            <p className="text-foreground/70 pt-4 opacity-0 animate-fadeInUp" style={{ animationDelay: `${contactItems.length * 150 + 300}ms` }}>
+            <p className="text-foreground/70 pt-4 opacity-0 animate-fadeInUp" style={{ animationDelay: `${contactItems.length * 150 + 450}ms` }}>
               Connect with us to explore how A.X. Studioz can help drive innovation and create impactful AI solutions for your needs.
             </p>
           </div>
           
-          <form onSubmit={handleSubmit} className="space-y-6 p-6 md:p-8 border rounded-lg shadow-lg bg-card opacity-0 animate-fadeInUp" style={{ animationDelay: '400ms' }}>
+          <form onSubmit={handleSubmit} className="space-y-6 p-6 md:p-8 border rounded-lg shadow-lg bg-card opacity-0 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
             <div>
               <Label htmlFor="name" className="font-semibold">Full Name</Label>
               <Input type="text" id="name" name="name" required className="mt-1" placeholder="Your Name" />

@@ -42,13 +42,13 @@ export default function NewsSection({ className }: { className?: string }) {
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">
             Latest Updates & Insights
           </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-foreground/80">
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-foreground/80 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
             Stay informed about our latest advancements, research, and company news.
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {newsItems.map((item, index) => (
-            <div key={item.title} className="opacity-0 animate-fadeInUp" style={{ animationDelay: `${index * 150 + 200}ms` }}>
+            <div key={item.title} className="opacity-0 animate-fadeInUp" style={{ animationDelay: `${index * 150 + 400}ms` }}>
               <NewsCard {...item} />
             </div>
           ))}

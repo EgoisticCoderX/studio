@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -89,24 +90,28 @@ export default {
           },
         },
         'fadeInUp': {
-          '0%': { opacity: '0', transform: 'translateY(30px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+          '0%': { opacity: '0', transform: 'translateY(30px) scale(0.98)' }, // Added scale
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
         },
         'fadeIn': {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        'gradient-bg': {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'fadeInUp': 'fadeInUp 0.6s ease-out forwards',
-        'fadeInUp-200': 'fadeInUp 0.6s ease-out 0.2s forwards',
-        'fadeInUp-400': 'fadeInUp 0.6s ease-out 0.4s forwards',
-        'fadeInUp-600': 'fadeInUp 0.6s ease-out 0.6s forwards',
-        'fadeIn': 'fadeIn 0.6s ease-out forwards',
-        'fadeIn-200': 'fadeIn 0.6s ease-out 0.2s forwards',
-        'fadeIn-400': 'fadeIn 0.6s ease-out 0.4s forwards',
+        'fadeInUp': 'fadeInUp 0.7s ease-out forwards', // Slightly longer duration
+        'fadeIn': 'fadeIn 0.7s ease-out forwards',
+        'gradient-bg': 'gradient-bg 15s ease infinite',
+      },
+      backgroundSize: { // For gradient animation
+        '200%': '200% 200%',
       },
     },
   },

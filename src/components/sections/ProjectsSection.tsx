@@ -34,13 +34,13 @@ export default function ProjectsSection({ className }: { className?: string }) {
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline">
             Our Flagship AI Projects
           </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-foreground/80">
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-foreground/80 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
             Discover the innovative AI solutions we're building to shape a better tomorrow.
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
-            <div key={project.title} className="opacity-0 animate-fadeInUp" style={{ animationDelay: `${index * 200 + 200}ms` }}>
+            <div key={project.title} className="opacity-0 animate-fadeInUp" style={{ animationDelay: `${index * 200 + 400}ms` }}>
               <ProjectCard {...project} />
             </div>
           ))}

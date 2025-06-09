@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -84,13 +85,12 @@
   }
   body {
     @apply bg-background text-foreground;
-    /* Apply Inter font by default to body */
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-headline; /* Apply Space Grotesk to headlines */
+    @apply font-headline; 
   }
   code, pre {
-    @apply font-code; /* Apply Source Code Pro to code blocks */
+    @apply font-code;
   }
 }
 
@@ -104,7 +104,6 @@
   background-color: hsl(var(--background) / 0.7);
 }
 
-/* Basic 3D placeholder styles */
 .three-canvas-container {
   width: 100%;
   height: 100%;
@@ -124,5 +123,39 @@
 }
 
 .active-nav-link::after {
-  @apply w-full; /* Ensure the underline is full width */
+  @apply w-full; 
+}
+
+/* For staggered animations. Add 'opacity-0' initially to elements */
+.animated-entry.is-visible {
+  /* This class can be used by JS to trigger animations, */
+  /* but often CSS :not(.opacity-0) or direct animation classes are sufficient */
+}
+
+/* Subtle animated gradient background for sections */
+.bg-gradient-animated {
+  background: linear-gradient(-45deg, hsl(var(--background)), hsl(var(--secondary)), hsl(var(--background)), hsl(var(--muted)));
+  background-size: 200% 200%;
+  @apply animate-gradient-bg;
+}
+.dark .bg-gradient-animated {
+   background: linear-gradient(-45deg, hsl(var(--background)), hsl(var(--secondary)), hsl(var(--background)), hsl(var(--muted)));
+   background-size: 200% 200%;
+   @apply animate-gradient-bg;
+}
+.bg-gradient-animated-secondary {
+  background: linear-gradient(-45deg, hsl(var(--secondary)), hsl(var(--background)), hsl(var(--secondary)), hsl(var(--muted)));
+  background-size: 200% 200%;
+  @apply animate-gradient-bg;
+}
+.dark .bg-gradient-animated-secondary {
+   background: linear-gradient(-45deg, hsl(var(--secondary)), hsl(var(--background)), hsl(var(--secondary)), hsl(var(--muted)));
+   background-size: 200% 200%;
+   @apply animate-gradient-bg;
+}
+
+
+/* Make sure opacity is applied if not already part of animation */
+.opacity-0 {
+  opacity: 0;
 }

@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 const navLinks = [
   { href: '/#hero', label: 'Home' },
   { href: '/#about', label: 'About' },
+  { href: '/#founders-words', label: "Founder's Words" },
   { href: '/#projects', label: 'Projects' },
   { href: '/#news', label: 'News' },
   { href: '/#contact', label: 'Contact' },
@@ -22,19 +23,29 @@ const navLinks = [
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setHasScrolled(true);
+      } else {
+        setHasScrolled(false);
+      }
+
       let currentSectionId = '';
-      const headerOffset = 80; 
+      const headerOffset = 80; // Height of the header
 
       for (let i = navLinks.length - 1; i >= 0; i--) {
         const link = navLinks[i];
         if (link.href.startsWith('/#')) {
-          const sectionId = link.href.substring(2);
+          const sectionId = link.href.substring(2); // Remove '/#'
           const sectionElement = document.getElementById(sectionId);
           if (sectionElement) {
-            if (sectionElement.offsetTop <= window.scrollY + headerOffset) {
+            // Check if section top is above scroll position + offset AND section bottom is below scroll position + offset
+            const sectionTop = sectionElement.offsetTop;
+            const sectionBottom = sectionTop + sectionElement.offsetHeight;
+            if (sectionTop <= window.scrollY + headerOffset && sectionBottom > window.scrollY + headerOffset) {
               currentSectionId = sectionId;
               break; 
             }
@@ -42,7 +53,8 @@ export default function Header() {
         }
       }
       
-      if (!currentSectionId && window.scrollY < 200) {
+      // Default to hero if no section is active (e.g., at the very top or bottom of the page beyond sections)
+      if (!currentSectionId && window.scrollY < 200) { // check if near the top
          currentSectionId = 'hero';
       }
 
@@ -50,7 +62,7 @@ export default function Header() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); 
+    handleScroll(); // Initial check
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -58,7 +70,10 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="translucent-navbar sticky top-0 z-50 w-full border-b border-border/40">
+    <header className={cn(
+      "sticky top-0 z-50 w-full border-b transition-all duration-300",
+      hasScrolled ? "translucent-navbar border-border/40" : "bg-transparent border-transparent"
+    )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <Logo />
         <nav className="hidden items-center space-x-6 md:flex">
@@ -73,7 +88,8 @@ export default function Header() {
                 href={link.href}
                 className={cn(
                   "relative text-sm font-medium transition-all duration-200 ease-in-out hover:text-primary hover:-translate-y-0.5 transform after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full",
-                  { 'active-nav-link': isActive }
+                  { 'active-nav-link': isActive },
+                  hasScrolled || activeSection !== 'hero' ? 'text-foreground' : 'text-foreground' // Default text color, adjust if needed for transparent bg
                 )}
               >
                 {link.label}
