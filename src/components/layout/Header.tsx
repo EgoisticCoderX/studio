@@ -12,7 +12,7 @@ import {
   SheetContent,
   SheetTrigger,
   SheetClose,
-  SheetTitle // Imported SheetTitle
+  SheetTitle
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 
@@ -81,17 +81,16 @@ export default function Header() {
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <Logo />
-        <nav className="hidden items-center space-x-6 md:flex">
+        {/* Desktop navigation removed to make hamburger menu primary */}
+        {/* <nav className="items-center space-x-6 flex">
           {navLinks.map((link) => {
             const isActivePage = typeof window !== 'undefined' && window.location.pathname === link.href && !link.href.includes('#');
-            // For section links, activeSection will be the id (e.g., 'about')
-            // For page links (like /auth), activeSection won't match.
             const isActiveSection = link.href.startsWith('/#') && activeSection === link.href.substring(2);
             const isActive = isActivePage || isActiveSection;
             
             return (
               <Link
-                key={link.label} // Using label as key since hrefs can change based on activeSection logic
+                key={link.label} 
                 href={link.href}
                 className={cn(
                   "relative text-sm font-medium transition-all duration-200 ease-in-out hover:text-primary hover:-translate-y-0.5 transform after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full",
@@ -103,52 +102,46 @@ export default function Header() {
               </Link>
             );
           })}
-        </nav>
+        </nav> */}
         <div className="flex items-center space-x-2">
           <ThemeToggle />
-          <div> 
-            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu className="h-6 w-6" />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-full max-w-xs bg-background p-6">
-                <SheetTitle className="sr-only">Main Navigation Menu</SheetTitle> 
-                <div className="mb-6 flex items-center justify-between">
-                  <Logo />
-                  <SheetClose asChild>
-                    <Button variant="ghost" size="icon">
-                      <X className="h-6 w-6" />
-                      <span className="sr-only">Close menu</span>
-                    </Button>
-                  </SheetClose>
-                </div>
-                <nav className="flex flex-col space-y-4">
-                  {navLinks.map((link) => {
-                     const isActivePage = typeof window !== 'undefined' && window.location.pathname === link.href && !link.href.includes('#');
-                     const isActiveSection = link.href.startsWith('/#') && activeSection === link.href.substring(2);
-                     const isActive = isActivePage || isActiveSection;
-                    return (
-                      <SheetClose asChild key={link.label}>
-                        <Link
-                          href={link.href}
-                           className={cn(
-                            "text-lg font-medium transition-colors hover:text-primary",
-                            { 'text-primary font-semibold': isActive }
-                          )}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          {link.label}
-                        </Link>
-                      </SheetClose>
-                    );
-                  })}
-                </nav>
-              </SheetContent>
-            </Sheet>
-          </div>
+          {/* Hamburger menu button now always visible */}
+          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-full max-w-xs bg-background p-6">
+              <SheetTitle className="sr-only">Main Navigation Menu</SheetTitle> 
+              <div className="mb-6 flex items-center justify-start"> {/* Adjusted justify-between to justify-start */}
+                <Logo />
+                {/* Removed explicit SheetClose button, SheetContent has a default one */}
+              </div>
+              <nav className="flex flex-col space-y-4">
+                {navLinks.map((link) => {
+                    const isActivePage = typeof window !== 'undefined' && window.location.pathname === link.href && !link.href.includes('#');
+                    const isActiveSection = link.href.startsWith('/#') && activeSection === link.href.substring(2);
+                    const isActive = isActivePage || isActiveSection;
+                  return (
+                    <SheetClose asChild key={link.label}>
+                      <Link
+                        href={link.href}
+                          className={cn(
+                          "text-lg font-medium transition-colors hover:text-primary",
+                          { 'text-primary font-semibold': isActive }
+                        )}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    </SheetClose>
+                  );
+                })}
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>
