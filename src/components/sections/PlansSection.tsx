@@ -59,7 +59,7 @@ export default function PlansSection({ className }: { className?: string }) {
             Choose the perfect plan to power your AI journey with A.X. Studioz.
           </p>
         </div>
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 items-stretch">
+        <div className="grid md:grid-cols-3 gap-8 items-stretch">
           {plans.map((plan, index) => (
             <div 
               key={plan.title} 

@@ -31,6 +31,8 @@ export default function BackToTopButton() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', toggleVisibility);
+      // Call it on mount to set initial state
+      toggleVisibility(); 
       return () => {
         window.removeEventListener('scroll', toggleVisibility);
       };
