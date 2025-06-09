@@ -15,6 +15,7 @@ const navLinks = [
   { href: '/#about', label: 'About' },
   { href: '/#founders-words', label: "Founder's Words" },
   { href: '/#projects', label: 'Projects' },
+  { href: '/#plans', label: 'Plans' },
   { href: '/#news', label: 'News' },
   { href: '/#contact', label: 'Contact' },
   { href: '/auth', label: 'Login' },
@@ -42,7 +43,6 @@ export default function Header() {
           const sectionId = link.href.substring(2); // Remove '/#'
           const sectionElement = document.getElementById(sectionId);
           if (sectionElement) {
-            // Check if section top is above scroll position + offset AND section bottom is below scroll position + offset
             const sectionTop = sectionElement.offsetTop;
             const sectionBottom = sectionTop + sectionElement.offsetHeight;
             if (sectionTop <= window.scrollY + headerOffset && sectionBottom > window.scrollY + headerOffset) {
@@ -53,8 +53,7 @@ export default function Header() {
         }
       }
       
-      // Default to hero if no section is active (e.g., at the very top or bottom of the page beyond sections)
-      if (!currentSectionId && window.scrollY < 200) { // check if near the top
+      if (!currentSectionId && window.scrollY < 200) { 
          currentSectionId = 'hero';
       }
 
@@ -62,7 +61,7 @@ export default function Header() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial check
+    handleScroll(); 
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -79,17 +78,19 @@ export default function Header() {
         <nav className="hidden items-center space-x-6 md:flex">
           {navLinks.map((link) => {
             const isActivePage = typeof window !== 'undefined' && window.location.pathname === link.href && !link.href.includes('#');
+            // For section links, activeSection will be the id (e.g., 'about')
+            // For page links (like /auth), activeSection won't match.
             const isActiveSection = link.href.startsWith('/#') && activeSection === link.href.substring(2);
             const isActive = isActivePage || isActiveSection;
             
             return (
               <Link
-                key={link.href}
+                key={link.label} // Using label as key since hrefs can change based on activeSection logic
                 href={link.href}
                 className={cn(
                   "relative text-sm font-medium transition-all duration-200 ease-in-out hover:text-primary hover:-translate-y-0.5 transform after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full",
                   { 'active-nav-link': isActive },
-                  hasScrolled || activeSection !== 'hero' ? 'text-foreground' : 'text-foreground' // Default text color, adjust if needed for transparent bg
+                  hasScrolled || activeSection !== 'hero' ? 'text-foreground' : 'text-foreground' 
                 )}
               >
                 {link.label}
@@ -123,7 +124,7 @@ export default function Header() {
                      const isActiveSection = link.href.startsWith('/#') && activeSection === link.href.substring(2);
                      const isActive = isActivePage || isActiveSection;
                     return (
-                      <SheetClose asChild key={link.href}>
+                      <SheetClose asChild key={link.label}>
                         <Link
                           href={link.href}
                            className={cn(
