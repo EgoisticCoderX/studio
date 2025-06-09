@@ -1,3 +1,4 @@
+
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -7,20 +8,43 @@ export default function HeroSection({ className }: { className?: string }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [offsetY, setOffsetY] = useState(0);
 
-  const handleScroll = () => setOffsetY(window.scrollY);
+  const handleScroll = () => {
+    if (sectionRef.current) {
+      // Calculate offset relative to the section's top
+      // This is a simple version; more robust solutions might use IntersectionObserver
+      // For now, window.scrollY provides a global parallax effect
+      setOffsetY(window.scrollY);
+    }
+  };
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
+    // Initial call to set position if already scrolled
+    handleScroll(); 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <section ref={sectionRef} className={`py-20 md:py-32 bg-gradient-to-br from-background to-secondary/30 overflow-hidden relative ${className}`}>
+    <section 
+      ref={sectionRef} 
+      className={`py-20 md:py-32 bg-gradient-to-br from-background to-secondary/30 overflow-hidden relative ${className}`}
+    >
       {/* Parallax background element */}
-      <div className="absolute inset-0" style={{ transform: `translateY(${offsetY * 0.3}px)` }}>
-        {/* You can place an image or another background element here */}
+      <div 
+        className="absolute inset-0 z-0 overflow-hidden" 
+        style={{ transform: `translateY(${offsetY * 0.4}px)` }}
+      >
+        <Image
+          src="https://placehold.co/1920x1200.png"
+          alt="Parallax background"
+          layout="fill"
+          objectFit="cover"
+          className="opacity-20" 
+          data-ai-hint="abstract texture"
+          priority
+        />
       </div>
-      <div className="container mx-auto px-4 md:px-6 text-center">
+      <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline opacity-0 animate-fadeInUp">
           Innovating AI for a{' '}
           <span className="text-primary">Brighter Future</span>
