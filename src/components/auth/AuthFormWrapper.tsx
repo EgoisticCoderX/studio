@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -21,14 +22,14 @@ export default function AuthFormWrapper() {
            isLogin ? "md:flex-row" : "md:flex-row-reverse"
         )}>
           {/* Solar System Panel */}
-          <div className="w-full md:w-1/2 h-64 md:h-auto bg-secondary/30 p-4 md:p-8 flex items-center justify-center order-1 transition-all duration-700 ease-in-out">
+          <div className="w-full md:w-1/2 h-64 md:h-auto bg-secondary/30 p-4 md:p-8 flex items-center justify-center order-1">
             <div className="w-full h-full max-w-md max-h-md aspect-square">
                <SolarSystem isAnimating={true} />
             </div>
           </div>
 
           {/* Form Panel */}
-          <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center order-2 transition-all duration-700 ease-in-out">
+          <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center order-2">
             <CardContent className="p-0">
               <div className="mb-6 text-center">
                  <h1 className="text-3xl font-bold text-primary font-headline">
