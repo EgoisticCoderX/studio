@@ -35,48 +35,67 @@ const newsItems = [
   },
 ];
 
-export default function NewsSection({ className }: { className?: string }) {const sectionRef = useRef(null);
+export default function NewsSection({ className }: { className?: string }) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
+            entry.target.classList.remove("opacity-0");
+            entry.target.classList.add("animate-fadeInUp"); // Ensure animation class is added
             observer.unobserve(entry.target);
           }
         });
       },
       {
-        root: null,
-        rootMargin: "0px",
-        threshold: 0.2, // Adjust as needed
+        threshold: 0.1, 
       }
     );
 
-    // Observe the section itself for the initial fade-in
     if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+       observer.observe(sectionRef.current); // Observe the section itself for its own animation
     }
+    
+    cardsRef.current.forEach((card) => {
+      if (card) {
+        observer.observe(card);
+      }
+    });
 
-    // Clean up the observer on component unmount
     return () => {
       observer.disconnect();
     };
   }, []);
 
   return (
-    <section id="news" ref={sectionRef} className={`py-16 md:py-24 bg-background overflow-hidden parallax-section ${className} fade-in-section`}>
+    <section 
+      id="news" 
+      ref={sectionRef} 
+      className={`py-16 md:py-24 bg-background overflow-hidden opacity-0 ${className}`} // Removed parallax-section, added opacity-0 for initial fade-in
+    >
       <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-12 fade-in-element">
+        <div className="text-center mb-12 opacity-0" style={{ animationDelay: '0s' }}> 
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">
             Latest Updates & Insights
           </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-foreground/80 fade-in-element" style={{ transitionDelay: '0.2s' }}>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-foreground/80 opacity-0" style={{ animationDelay: '0.2s' }}>
             Stay informed about our latest advancements, research, and company news.
           </p>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 fade-in-grid">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {newsItems.map((item, index) => (
+            <div
+              key={item.title}
+              ref={el => cardsRef.current[index] = el}
+              className="opacity-0 h-full" // Added h-full for consistent card height if needed
+              style={{ animationDelay: `${index * 150 + 400}ms` }} // Staggered animation for cards
+            >
+              <NewsCard {...item} />
+            </div>
+          ))}
         </div>
       </div>
     </section>
