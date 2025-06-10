@@ -1,3 +1,4 @@
+
 "use client";
 
 import ProjectCard from "@/components/ProjectCard";
@@ -30,11 +31,15 @@ const projects = [
 
 
 export default function ProjectsSection({ className }: { className?: string }) {
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [offsetY, setOffsetY] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
 
-  const handleScroll = () => setOffsetY(window.scrollY);
+  const handleScroll = () => {
+    if (typeof window !== 'undefined') {
+      setScrollY(window.scrollY);
+    }
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -47,17 +52,23 @@ export default function ProjectsSection({ className }: { className?: string }) {
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentSectionRef = sectionRef.current;
+    if (currentSectionRef) {
+      observer.observe(currentSectionRef);
     }
 
-    window.addEventListener("scroll", handleScroll);
+    if (typeof window !== 'undefined') {
+      window.addEventListener("scroll", handleScroll);
+      handleScroll(); // Initialize scrollY
+    }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentSectionRef) {
+        observer.unobserve(currentSectionRef);
       }
-      window.removeEventListener("scroll", handleScroll);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener("scroll", handleScroll);
+      }
     };
   }, []);
 
@@ -67,18 +78,33 @@ export default function ProjectsSection({ className }: { className?: string }) {
       id="projects"
       className={`py-16 md:py-24 overflow-hidden relative ${className || ""}`}
       style={{
-        backgroundImage: `url('/images/projects-background.webp')`, // Replace with your background image
+        backgroundImage: `url('https://placehold.co/1920x1080.png')`,
         backgroundSize: 'cover',
-        backgroundPosition: `center ${offsetY * 0.2}px`, // Adjust parallax speed
-        backgroundAttachment: 'fixed' // Helps with parallax
+        backgroundPosition: `center ${scrollY * 0.2}px`,
+        backgroundAttachment: 'fixed'
       }}
+      data-ai-hint="technology abstract"
     >
-      <div className="absolute inset-0 bg-secondary/80 backdrop-blur-sm z-0"></div> {/* Overlay for readability */}
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="absolute inset-0 bg-secondary/80 backdrop-blur-sm z-0"></div>
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className={`text-center mb-12 transition-opacity duration-1000 ease-in-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">
             Our Flagship AI Projects
           </h2>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-foreground/80 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
+            Discover the innovative AI solutions we're building to shape the future.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-8 items-stretch">
+          {projects.map((project, index) => (
+            <div
+              key={project.title}
+              className="opacity-0 animate-fadeInUp h-full"
+              style={{ animationDelay: `${index * 200 + 400}ms` }}
+            >
+              <ProjectCard {...project} />
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, MapPin } from "lucide-react"; 
+import { Mail, Phone, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from 'react';
+import { cn } from "@/lib/utils";
 
 export default function ContactSection({ className }: { className?: string }) {
   const { toast } = useToast();
@@ -25,23 +26,35 @@ export default function ContactSection({ className }: { className?: string }) {
           }
         });
       },
-      { threshold: 0.2 } // Adjust threshold as needed
+      { threshold: 0.2 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentSectionRef = sectionRef.current;
+    if (currentSectionRef) {
+      observer.observe(currentSectionRef);
     }
 
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      if (typeof window !== 'undefined') {
+        setScrollY(window.scrollY);
+      }
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', handleScroll);
+      handleScroll(); // Initialize scrollY
+    }
 
     return () => {
-      if (sectionRef.current) observer.unobserve(sectionRef.current);
-      window.removeEventListener('scroll', handleScroll);
+      if (currentSectionRef) {
+        observer.unobserve(currentSectionRef);
+      }
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('scroll', handleScroll);
+      }
     };
   }, []);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => { 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     toast({
       title: "Message Sent!",
@@ -72,10 +85,17 @@ export default function ContactSection({ className }: { className?: string }) {
     <section
       ref={sectionRef}
       id="contact"
-      className={`py-16 md:py-24 bg-background overflow-hidden parallax-section ${className}`}
-      style={{ backgroundPositionY: `${scrollY * 0.3}px` }} // Enhance parallax effect
+      className={cn("py-16 md:py-24 overflow-hidden relative", className)}
+      style={{
+        backgroundImage: `url('https://placehold.co/1920x1080.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: `center ${scrollY * 0.15}px`, // Adjusted speed
+        backgroundAttachment: 'fixed',
+      }}
+      data-ai-hint="communication network"
     >
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-0"></div>
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className={`text-center mb-12 transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">
             Get In Touch
@@ -89,21 +109,21 @@ export default function ContactSection({ className }: { className?: string }) {
           <div className="space-y-6">
             <h3 className="text-2xl font-semibold font-headline opacity-0 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>Contact Information</h3>
             {contactItems.map((item, index) => (
-              <div 
-                key={item.key} 
-                className="flex items-center space-x-3 opacity-0 animate-fadeInUp" 
-                style={{ transition: 'opacity 0.8s ease-out', transitionDelay: `${index * 0.2 + 0.5}s` }} // Smooth transition with delay
+              <div
+                key={item.key}
+                className="flex items-start space-x-3 opacity-0 animate-fadeInUp" // Changed items-center to items-start
+                style={{ animationDelay: `${index * 0.2 + 0.5}s` }}
               >
-                {item.icon}
-                {item.text}
+                <span className="mt-1">{item.icon}</span> {/* Added mt-1 for better alignment with multi-line text */}
+                <div>{item.text}</div>
               </div>
             ))}
-            <p className={`text-foreground/70 pt-4 transition-opacity duration-1000 delay-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+            <p className={`text-foreground/70 pt-4 transition-opacity duration-1000 delay-700 ${isVisible ? 'opacity-100' : 'opacity-0'} opacity-0 animate-fadeInUp`} style={{ animationDelay: '1.1s' }}>
               Connect with us to explore how A.X. Studioz can help drive innovation and create impactful AI solutions for your needs.
-            </p> 
+            </p>
           </div>
-          
-          <form onSubmit={handleSubmit} className="space-y-6 p-6 md:p-8 border rounded-lg shadow-lg bg-card opacity-0 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
+
+          <form onSubmit={handleSubmit} className="space-y-6 p-6 md:p-8 border rounded-lg shadow-xl bg-card/80 backdrop-blur-sm opacity-0 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
             <div>
               <Label htmlFor="name" className="font-semibold">Full Name</Label>
               <Input type="text" id="name" name="name" required className="mt-1" placeholder="Your Name" />
