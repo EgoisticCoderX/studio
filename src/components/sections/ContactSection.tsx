@@ -14,7 +14,6 @@ export default function ContactSection({ className }: { className?: string }) {
   const { toast } = useToast();
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -34,22 +33,9 @@ export default function ContactSection({ className }: { className?: string }) {
       observer.observe(currentSectionRef);
     }
 
-    const handleScroll = () => {
-      if (typeof window !== 'undefined') {
-        setScrollY(window.scrollY);
-      }
-    };
-    if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', handleScroll);
-      handleScroll(); // Initialize scrollY
-    }
-
     return () => {
       if (currentSectionRef) {
         observer.unobserve(currentSectionRef);
-      }
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('scroll', handleScroll);
       }
     };
   }, []);
@@ -85,16 +71,9 @@ export default function ContactSection({ className }: { className?: string }) {
     <section
       ref={sectionRef}
       id="contact"
-      className={cn("py-16 md:py-24 overflow-hidden relative", className)}
-      style={{
-        backgroundImage: `url('https://placehold.co/1920x1080.png')`,
-        backgroundSize: 'cover',
-        backgroundPosition: `center ${scrollY * 0.15}px`, // Adjusted speed
-        backgroundAttachment: 'fixed',
-      }}
-      data-ai-hint="communication network"
+      className={cn("py-16 md:py-24 overflow-hidden relative bg-gradient-animated-secondary", className)}
     >
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-0"></div>
+      <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-0"></div> {/* Adjusted overlay for better contrast */}
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className={`text-center mb-12 transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">
@@ -111,10 +90,10 @@ export default function ContactSection({ className }: { className?: string }) {
             {contactItems.map((item, index) => (
               <div
                 key={item.key}
-                className="flex items-start space-x-3 opacity-0 animate-fadeInUp" // Changed items-center to items-start
+                className="flex items-start space-x-3 opacity-0 animate-fadeInUp"
                 style={{ animationDelay: `${index * 0.2 + 0.5}s` }}
               >
-                <span className="mt-1">{item.icon}</span> {/* Added mt-1 for better alignment with multi-line text */}
+                <span className="mt-1">{item.icon}</span>
                 <div>{item.text}</div>
               </div>
             ))}
