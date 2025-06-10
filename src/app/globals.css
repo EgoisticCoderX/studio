@@ -134,23 +134,59 @@
 
 /* Subtle animated gradient background for sections */
 .bg-gradient-animated {
-  background: linear-gradient(-45deg, hsl(var(--background)), hsl(var(--secondary)), hsl(var(--background)), hsl(var(--muted)));
-  background-size: 200% 200%;
+  background: linear-gradient(-45deg, 
+    hsl(var(--background)), 
+    hsl(var(--secondary)), 
+    hsl(var(--primary)), 
+    hsl(var(--accent)), 
+    hsl(var(--muted)), 
+    hsl(var(--primary)), 
+    hsl(var(--secondary)), 
+    hsl(var(--background))
+  );
+  background-size: 400% 400%;
   @apply animate-gradient-bg;
 }
 .dark .bg-gradient-animated {
-   background: linear-gradient(-45deg, hsl(var(--background)), hsl(var(--secondary)), hsl(var(--background)), hsl(var(--muted)));
-   background-size: 200% 200%;
+   background: linear-gradient(-45deg, 
+    hsl(var(--background)), 
+    hsl(var(--secondary)), 
+    hsl(var(--primary)), 
+    hsl(var(--accent)), 
+    hsl(var(--muted)), 
+    hsl(var(--primary)), 
+    hsl(var(--secondary)), 
+    hsl(var(--background))
+  );
+   background-size: 400% 400%;
    @apply animate-gradient-bg;
 }
 .bg-gradient-animated-secondary {
-  background: linear-gradient(-45deg, hsl(var(--secondary)), hsl(var(--background)), hsl(var(--secondary)), hsl(var(--muted)));
-  background-size: 200% 200%;
+  background: linear-gradient(-45deg, 
+    hsl(var(--secondary)), 
+    hsl(var(--muted)), 
+    hsl(var(--accent)), 
+    hsl(var(--primary)), 
+    hsl(var(--background)), 
+    hsl(var(--accent)), 
+    hsl(var(--muted)), 
+    hsl(var(--secondary))
+  );
+  background-size: 400% 400%;
   @apply animate-gradient-bg;
 }
 .dark .bg-gradient-animated-secondary {
-   background: linear-gradient(-45deg, hsl(var(--secondary)), hsl(var(--background)), hsl(var(--secondary)), hsl(var(--muted)));
-   background-size: 200% 200%;
+   background: linear-gradient(-45deg, 
+    hsl(var(--secondary)), 
+    hsl(var(--muted)), 
+    hsl(var(--accent)), 
+    hsl(var(--primary)), 
+    hsl(var(--background)), 
+    hsl(var(--accent)), 
+    hsl(var(--muted)), 
+    hsl(var(--secondary))
+  );
+   background-size: 400% 400%;
    @apply animate-gradient-bg;
 }
 
