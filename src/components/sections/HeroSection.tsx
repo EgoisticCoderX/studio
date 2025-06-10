@@ -6,62 +6,47 @@ import Link from 'next/link';
 import { useRef } from 'react';
 import Image from 'next/image';
 import { useTypewriter } from '@/hooks/useTypewriter';
-// StarryNightBackground is now global, removed from here
 
 export default function HeroSection({ className }: { className?: string }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const fullHeadline = "Innovating AI for a Brighter Future";
-  const typewriterIsLooping = true; 
-  const typedHeadlineContent = useTypewriter(fullHeadline, { typingSpeed: 70, loop: typewriterIsLooping, delayAfterTyping: 2500 });
-  
+
+  const headlines = [
+    "Innovating AI for a Brighter Future",
+    "Empowering People with Intelligent Tech",
+    "Shaping Tomorrow with Ethical AI",
+    "Pioneering Advancements for Humanity"
+  ];
+  const typewriterIsLooping = true;
+
+  const { typedText: typedHeadlineContent, currentFullText, isDeleting: typewriterIsDeletingCurrentState } = useTypewriter(headlines, {
+    typingSpeed: 70,
+    loop: typewriterIsLooping,
+    delayAfterTyping: 2000 // Slightly shorter delay before deleting
+  });
+
   const renderHeadline = () => {
-    const keyword = "Brighter Future";
-    const keywordActual = fullHeadline.includes(keyword) ? keyword : "";
-  
-    let currentlyTypedKeyword = "";
-    if (typedHeadlineContent.length > fullHeadline.indexOf(keywordActual)) {
-      currentlyTypedKeyword = typedHeadlineContent.substring(
-        fullHeadline.indexOf(keywordActual), 
-        Math.min(typedHeadlineContent.length, fullHeadline.indexOf(keywordActual) + keywordActual.length)
-      );
-    }
-  
-    const beforeKeywordText = typedHeadlineContent.substring(0, fullHeadline.indexOf(keywordActual));
-    const afterKeywordText = typedHeadlineContent.substring(fullHeadline.indexOf(keywordActual) + keywordActual.length);
+    // Show cursor if:
+    // 1. Not fully typed for the current phrase OR
+    // 2. Looping AND (there's some text OR it's paused before deleting OR just finished deleting and about to type next)
+    const showCursor = (typedHeadlineContent.length < currentFullText.length) ||
+                       (typewriterIsLooping && 
+                           (typedHeadlineContent.length > 0 || 
+                           (typedHeadlineContent.length === currentFullText.length && !typewriterIsDeletingCurrentState) ||
+                           (typewriterIsDeletingCurrentState && typedHeadlineContent.length === 0) 
+                           )
+                       );
 
-    const showCursor = typedHeadlineContent.length < fullHeadline.length || (typedHeadlineContent.length > 0 && typewriterIsLooping);
-
-
-    if (keywordActual && typedHeadlineContent.length >= fullHeadline.indexOf(keywordActual)) {
-      return (
-        <>
-          {beforeKeywordText}
-          <span className="text-primary">{currentlyTypedKeyword}</span>
-          {afterKeywordText}
-          {showCursor && <span className="inline-block animate-pulse">|</span>}
-        </>
-      );
-    }
     return <>{typedHeadlineContent}{showCursor && <span className="inline-block animate-pulse">|</span>}</>;
   };
 
-
   return (
-    <section 
-      id="hero" 
+    <section
+      id="hero"
       ref={sectionRef}
-      // Removed parallax-section class as background is now global
-      className={`py-20 md:py-32 relative z-10 overflow-hidden ${className || ''}`} 
+      className={`py-20 md:py-32 relative z-10 overflow-hidden ${className || ''}`}
     >
-      {/* Background Element for Parallax was here, now global */}
-      {/* <div
-        className="absolute inset-0 z-0 overflow-hidden opacity-70"
-        style={{ transform: `translateY(${offsetY * 0.2}px)` }} 
-      >
-        <StarryNightBackground />
-      </div> */}
-      <div className="container mx-auto px-4 md:px-6 text-center relative z-10"> {/* Ensure content is above background */}
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline opacity-100 min-h-[100px] md:min-h-[160px]">
+      <div className="container mx-auto px-4 md:px-6 text-center relative z-10">
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline opacity-100 min-h-[100px] md:min-h-[160px] lg:min-h-[190px]">
           {renderHeadline()}
         </h1>
         <p className="mt-6 max-w-3xl mx-auto text-lg text-foreground/80 md:text-xl opacity-0 animate-fadeInUp" style={{animationDelay: '0.2s'}}>
@@ -77,9 +62,9 @@ export default function HeroSection({ className }: { className?: string }) {
           </Button>
         </div>
         <div className="mt-16 relative aspect-video max-w-4xl mx-auto rounded-lg overflow-hidden shadow-2xl opacity-0 animate-fadeInUp bg-card/50 backdrop-blur-sm" style={{animationDelay: '0.6s'}}>
-            <Image 
-              src="https://placehold.co/1200x675.png" 
-              alt="AI Technology Showcase" 
+            <Image
+              src="https://placehold.co/1200x675.png"
+              alt="AI Technology Showcase"
               layout="fill"
               objectFit="cover"
               priority
