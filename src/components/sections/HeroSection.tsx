@@ -3,10 +3,10 @@
 
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useRef, useState, useEffect } from 'react'; // Added useState, useEffect
+import { useRef } from 'react';
 import Image from 'next/image';
 import { useTypewriter } from '@/hooks/useTypewriter';
-import StarryNightBackground from '@/components/three/StarryNightBackground';
+// StarryNightBackground is now global, removed from here
 
 export default function HeroSection({ className }: { className?: string }) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -14,18 +14,6 @@ export default function HeroSection({ className }: { className?: string }) {
   const typewriterIsLooping = true; 
   const typedHeadlineContent = useTypewriter(fullHeadline, { typingSpeed: 70, loop: typewriterIsLooping, delayAfterTyping: 2500 });
   
-  const [offsetY, setOffsetY] = useState(0); // Added offsetY state
-
-  useEffect(() => { // Added effect to update offsetY on scroll
-    const handleScroll = () => {
-      setOffsetY(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
   const renderHeadline = () => {
     const keyword = "Brighter Future";
     const keywordActual = fullHeadline.includes(keyword) ? keyword : "";
@@ -62,15 +50,16 @@ export default function HeroSection({ className }: { className?: string }) {
     <section 
       id="hero" 
       ref={sectionRef}
-      className={`py-20 md:py-32 relative z-10 parallax-section overflow-hidden ${className || ''}`} 
->
-      {/* Background Element for Parallax */}
-      <div
-        className="absolute inset-0 z-0 overflow-hidden opacity-70" // Increased opacity from 40 to 70
+      // Removed parallax-section class as background is now global
+      className={`py-20 md:py-32 relative z-10 overflow-hidden ${className || ''}`} 
+    >
+      {/* Background Element for Parallax was here, now global */}
+      {/* <div
+        className="absolute inset-0 z-0 overflow-hidden opacity-70"
         style={{ transform: `translateY(${offsetY * 0.2}px)` }} 
       >
         <StarryNightBackground />
-      </div>
+      </div> */}
       <div className="container mx-auto px-4 md:px-6 text-center relative z-10"> {/* Ensure content is above background */}
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-headline opacity-100 min-h-[100px] md:min-h-[160px]">
           {renderHeadline()}
@@ -87,7 +76,7 @@ export default function HeroSection({ className }: { className?: string }) {
             <Link href="/#contact">Get In Touch</Link>
           </Button>
         </div>
-        <div className="mt-16 relative aspect-video max-w-4xl mx-auto rounded-lg overflow-hidden shadow-2xl opacity-0 animate-fadeInUp" style={{animationDelay: '0.6s'}}>
+        <div className="mt-16 relative aspect-video max-w-4xl mx-auto rounded-lg overflow-hidden shadow-2xl opacity-0 animate-fadeInUp bg-card/50 backdrop-blur-sm" style={{animationDelay: '0.6s'}}>
             <Image 
               src="https://placehold.co/1200x675.png" 
               alt="AI Technology Showcase" 
@@ -95,8 +84,9 @@ export default function HeroSection({ className }: { className?: string }) {
               objectFit="cover"
               priority
               data-ai-hint="futuristic interface"
+              className="opacity-80"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
             <div className="absolute bottom-8 left-8 text-left">
                 <h2 className="text-3xl font-bold text-white">AI in Action</h2>
                 <p className="text-lg text-white/80 mt-2">Visualizing the future of intelligent systems.</p>

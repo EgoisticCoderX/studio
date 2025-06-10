@@ -7,7 +7,7 @@ import Footer from '@/components/layout/Footer';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import BackToTopButton from '@/components/BackToTopButton';
-// Removed import for StarryNightBackground as it's used contextually in HeroSection
+import StarryNightBackground from '@/components/three/StarryNightBackground';
 
 export const metadata: Metadata = {
   title: 'A.X. Studioz - AI for the People',
@@ -28,7 +28,10 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet" />
       </head>
-      <body className={cn("font-body antialiased min-h-screen flex flex-col")}>
+      <body className={cn("font-body antialiased min-h-screen flex flex-col relative")}>
+        <div className="fixed inset-0 -z-10">
+          <StarryNightBackground />
+        </div>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -41,13 +44,6 @@ export default function RootLayout({
           <Toaster />
           <BackToTopButton />
         </ThemeProvider>
-        {/* 
-          The StarryNightBackground component was removed from here.
-          It's primarily intended for the HeroSection's parallax effect.
-          If a global, fixed background is desired, it would need different styling 
-          (e.g., position: fixed, z-index: -1) and careful consideration 
-          to avoid conflicts with section-specific backgrounds.
-        */}
       </body>
     </html>
   );

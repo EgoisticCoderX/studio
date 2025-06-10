@@ -20,43 +20,13 @@ const StarryNightBackground: React.FC = () => {
     scene.background = null; 
 
     // Camera
-    const camera = new THREE.PerspectiveCamera(60, currentMount.clientWidth / currentMount.clientHeight, 0.1, 1000);
-    camera.position.z = 5; // Start camera a bit further back
+    const camera = new THREE.PerspectiveCamera(60, currentMount.clientWidth / currentMount.clientHeight, 0.1, 2000); // Increased far plane
+    camera.position.z = 5; 
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
     currentMount.appendChild(renderer.domElement);
-
-    // Mountains
-    const mountainGroup = new THREE.Group();
-    scene.add(mountainGroup);
-
-    const mountainColors = [0xff00ff, 0x00ffff, 0xffff00, 0xffa500, 0x90ee90]; // Funky colors
-
-    const createMountain = (x: number, z: number) => {
-        const height = Math.random() * 200 + 50; // Random height
-        const width = Math.random() * 150 + 50; // Random width
-        const depth = Math.random() * 150 + 50; // Random depth
-
-        // Create a cone-like shape for simplicity
-        const mountainGeometry = new THREE.ConeGeometry(width, height, 4); // Low-poly cone
-        const mountainMaterial = new THREE.MeshBasicMaterial({ color: mountainColors[Math.floor(Math.random() * mountainColors.length)] }); // Random funky color
-
-        const mountain = new THREE.Mesh(mountainGeometry, mountainMaterial);
-        mountain.position.set(x, -currentMount.clientHeight / 2 + height / 4, z); // Position at the bottom
-        mountain.rotation.y = Math.random() * Math.PI * 2; // Random rotation
-        mountainGroup.add(mountain);
-    };
-
-    // Create several mountains
-    const numMountains = 15;
-    for (let i = 0; i < numMountains; i++) {
-        const x = THREE.MathUtils.randFloatSpread(800); // Spread mountains horizontally
-        const z = THREE.MathUtils.randFloatSpread(800) - 500; // Position mountains in the distance
-        createMountain(x, z);
-    }
-
 
     // Starfield
     const starVertices: number[] = []; 
@@ -64,32 +34,40 @@ const StarryNightBackground: React.FC = () => {
     starMaterialsRef.current = [];
 
     for (let i = 0; i < numStars; i++) {
-      const x = THREE.MathUtils.randFloatSpread(1500); // Spread stars wider
-      const y = THREE.MathUtils.randFloatSpread(1500);
-      const z = THREE.MathUtils.randFloatSpread(1500);
+      const x = THREE.MathUtils.randFloatSpread(2000); // Spread stars wider
+      const y = THREE.MathUtils.randFloatSpread(2000);
+      const z = THREE.MathUtils.randFloatSpread(2000); // Spread stars deeper
       starVertices.push(x, y, z);
     }
     
     const starGeometry = new THREE.BufferGeometry();
     starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-
-    // Create a few materials for different star appearances (size, opacity for twinkling)
-    const materialConfigs = [
-        { size: 0.008, color: 0xffffff, opacity: 1.0 },
-        { size: 0.01, color: 0xeeeeff, opacity: 0.8 },
-        { size: 0.006, color: 0xffdddd, opacity: 0.9 }, // Subtle reddish tint for some stars
-    ];
     
-    // Assign materials somewhat randomly to groups of stars if needed, or use one main material
-    // For simplicity with twinkling on main material:
     const mainStarMaterial = new THREE.PointsMaterial({
       color: 0xffffff,
-      size: 0.15, // Increased star size
+      size: 1.5, 
       sizeAttenuation: true,
       transparent: true, 
       opacity: 0.85,
+      map: createStarTexture(), // Add a simple circular texture
+      blending: THREE.AdditiveBlending, // For a brighter look
     });
     starMaterialsRef.current.push(mainStarMaterial);
+
+    function createStarTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 64;
+      canvas.height = 64;
+      const context = canvas.getContext('2d');
+      if (context) {
+        context.beginPath();
+        context.arc(32, 32, 30, 0, 2 * Math.PI);
+        context.fillStyle = 'white';
+        context.fill();
+      }
+      return new THREE.CanvasTexture(canvas);
+    }
+
 
     const stars = new THREE.Points(starGeometry, mainStarMaterial);
     starsRef.current = stars;
@@ -102,21 +80,20 @@ const StarryNightBackground: React.FC = () => {
       animationFrameId.current = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // Subtle twinkling effect by oscillating opacity
       if (starsRef.current) {
         const mainMat = starsRef.current.material as THREE.PointsMaterial;
-        mainMat.opacity = 0.9 + Math.sin(elapsedTime * 2) * 0.1; // Increased base opacity and faster twinkling
+        // Subtle individual star twinkling can be complex; this is a global opacity pulse.
+        mainMat.opacity = 0.7 + Math.sin(elapsedTime * 1.5) * 0.3; 
       }
 
-      // Rotate the starfield
       if (starsRef.current) {
-        starsRef.current.rotation.x = elapsedTime * 0.005;
-        starsRef.current.rotation.y = elapsedTime * 0.008;
+        starsRef.current.rotation.x += 0.0001; // Slower rotation
+        starsRef.current.rotation.y += 0.0002; // Slower rotation
       }
 
-      // Move camera forward slightly for 'flying' effect
-      camera.position.z -= 0.05; // Increased movement speed
-      if (camera.position.z < -800) camera.position.z = 800; // Adjusted loop point
+      // Move camera forward for 'flying through space' effect
+      camera.position.z -= 0.1; // Adjust speed of travel
+      if (camera.position.z < -1000) camera.position.z = 1000; // Loop camera position
       
       renderer.render(scene, camera);
     };
@@ -143,7 +120,10 @@ const StarryNightBackground: React.FC = () => {
       }
       renderer.dispose();
       starGeometry.dispose();
-      starMaterialsRef.current.forEach(mat => mat.dispose());
+      starMaterialsRef.current.forEach(mat => {
+        if (mat.map) mat.map.dispose();
+        mat.dispose();
+      });
     };
   }, []);
 
