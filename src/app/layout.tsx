@@ -8,6 +8,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import BackToTopButton from '@/components/BackToTopButton';
 import StarryNightBackground from '@/components/three/StarryNightBackground';
+import CustomCursor from '@/components/effects/CustomCursor'; // Added import
 
 export const metadata: Metadata = {
   title: 'A.X. Studioz - AI for the People',
@@ -29,6 +30,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet" />
       </head>
       <body className={cn("font-body antialiased min-h-screen flex flex-col relative")}>
+        <CustomCursor /> {/* Added CustomCursor component */}
         <div className="fixed inset-0 -z-10">
           <StarryNightBackground />
         </div>

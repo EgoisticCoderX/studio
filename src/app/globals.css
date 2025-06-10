@@ -85,6 +85,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    cursor: none !important; /* Hide default cursor */
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline; 
@@ -93,6 +94,26 @@
     @apply font-code;
   }
 }
+
+.custom-cursor-circle {
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  transition: background-color 0.1s ease-out, transform 0.05s ease-out, opacity 0.2s ease-out;
+  mix-blend-mode: difference; /* Optional: for interesting color effects over content */
+}
+
+.particle {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998; /* Below cursor circle but above most content */
+}
+
 
 .translucent-navbar {
   background-color: hsl(var(--background) / 0.7);
