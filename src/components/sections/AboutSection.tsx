@@ -43,7 +43,7 @@ export default function AboutSection({ className: incomingClassName }: { classNa
   }, []);
 
   // Construct the final className string, handling the optional incomingClassName
-  const sectionClasses = `py-16 md:py-24 bg-gradient-animated overflow-hidden relative ${incomingClassName || ''}`.trim();
+  const sectionClasses = `py-16 md:py-24 overflow-hidden relative ${incomingClassName || ''}`.trim();
 
   return (
     <section id="about" ref={sectionRef} className={sectionClasses}>

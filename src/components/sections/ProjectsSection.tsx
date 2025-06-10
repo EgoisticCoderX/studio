@@ -62,9 +62,9 @@ export default function ProjectsSection({ className }: { className?: string }) {
     <section
       ref={sectionRef}
       id="projects"
-      className={cn("py-16 md:py-24 overflow-hidden relative bg-gradient-animated", className)}
+      className={cn("py-16 md:py-24 overflow-hidden relative", className)}
     >
-      <div className="absolute inset-0 bg-secondary/30 backdrop-blur-sm z-0"></div> {/* Adjusted overlay for better contrast with animated gradient */}
+      <div className="absolute inset-0 bg-secondary/30 backdrop-blur-sm z-0"></div>
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className={`text-center mb-12 transition-opacity duration-1000 ease-in-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">

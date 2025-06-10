@@ -71,9 +71,9 @@ export default function ContactSection({ className }: { className?: string }) {
     <section
       ref={sectionRef}
       id="contact"
-      className={cn("py-16 md:py-24 overflow-hidden relative bg-gradient-animated-secondary", className)}
+      className={cn("py-16 md:py-24 overflow-hidden relative", className)}
     >
-      <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-0"></div> {/* Adjusted overlay for better contrast */}
+      <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-0"></div>
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className={`text-center mb-12 transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl font-headline text-primary">

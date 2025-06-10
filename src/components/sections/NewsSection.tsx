@@ -74,7 +74,7 @@ export default function NewsSection({ className }: { className?: string }) {
     <section 
       id="news" 
       ref={sectionRef} 
-      className={`py-16 md:py-24 bg-background overflow-hidden opacity-0 ${className}`} // Removed parallax-section, added opacity-0 for initial fade-in
+      className={`py-16 md:py-24 overflow-hidden opacity-0 relative ${className}`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-12 opacity-0" style={{ animationDelay: '0s' }}> 
@@ -90,8 +90,8 @@ export default function NewsSection({ className }: { className?: string }) {
             <div
               key={item.title}
               ref={el => cardsRef.current[index] = el}
-              className="opacity-0 h-full" // Added h-full for consistent card height if needed
-              style={{ animationDelay: `${index * 150 + 400}ms` }} // Staggered animation for cards
+              className="opacity-0 h-full" 
+              style={{ animationDelay: `${index * 150 + 400}ms` }} 
             >
               <NewsCard {...item} />
             </div>
